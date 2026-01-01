@@ -1,91 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'media'
+}
+</script>
 </head>
-<body class="bg-gray-50">
 
-<div class="sticky top-0 bg-white shadow p-3 space-y-2">
-  <div class="flex justify-between items-center">
-    <div class="text-xl font-bold">Shreeji Cafe</div>
-    <button id="langBtn" class="px-3 py-1 bg-green-500 text-white rounded">हिंदी</button>
-  </div>
-  <input id="search" placeholder="Search..." class="w-full p-2 border rounded" oninput="search()">
+<body class="bg-gray-100 dark:bg-gray-900 transition">
+
+<!-- Promotion Banner -->
+<div class="bg-yellow-400 text-gray-900 text-center py-2 font-semibold">
+  🎉 Today’s Offer: Buy 2 Get 1 Free on Combos!
 </div>
 
-<div id="categories" class="flex overflow-x-auto p-2 gap-2"></div>
-<div id="menu" class="grid grid-cols-2 gap-3 p-3"></div>
+<!-- Header -->
+<div class="sticky top-0 z-50 bg-gradient-to-r from-green-500 to-emerald-600 dark:from-gray-800 dark:to-gray-900 text-white p-4 shadow">
+  <div class="flex justify-between items-center">
+    <div class="text-xl font-bold">Shreeji Cafe</div>
+    <button id="langBtn" class="bg-white dark:bg-gray-700 text-green-600 dark:text-green-400 px-3 py-1 rounded-full font-semibold">हिंदी</button>
+  </div>
+  <input id="search" placeholder="Search food..." class="mt-2 w-full p-2 rounded text-gray-700 dark:bg-gray-700 dark:text-white" />
+</div>
+
+<!-- Categories -->
+<div id="categories" class="flex gap-2 overflow-x-auto p-3 bg-white dark:bg-gray-800 shadow"></div>
+
+<!-- Menu -->
+<div id="menu" class="grid grid-cols-2 gap-4 p-4"></div>
 
 <script>
 const API = "https://script.google.com/macros/s/AKfycbxCBbWRBXfeZUZk4_jJe12aBZZYn0PueDq2b_3EnZ6AqIh_vnZhuxVZcb-t3X_2rDk2Ew/exec";
 const WHATSAPP = "918512034223"; // your number
-let lang="en", all=[], filtered=[];
+let lang = "en";
+let allItems = [];
+let currentItems = [];
 
-fetch(API).then(r=>r.json()).then(d=>{
-  all=d; filtered=d;
-  buildCats(d); render(d);
+fetch(API).then(r => r.json()).then(data => {
+  allItems = data;
+  currentItems = data;
+  buildCategories(data);
+  render(data);
 });
 
-function buildCats(data){
-  const cats=[...new Set(data.map(i=>i.category))];
-  const box=document.getElementById("categories");
-  box.innerHTML="";
-  ["All","Combos",...cats].forEach(c=>{
-    const b=document.createElement("button");
-    b.innerText=c;
-    b.className="px-4 py-2 bg-green-100 rounded-full whitespace-nowrap";
-    b.onclick=()=>{
-      filtered = c==="All"?all : c==="Combos"?all.filter(i=>i.combo):all.filter(i=>i.category===c);
-      render(filtered);
+function buildCategories(data){
+  const cats = [...new Set(data.map(i => i.category))];
+  const box = document.getElementById("categories");
+  box.innerHTML = "";
+
+  ["All", "Combos", ...cats].forEach(c => {
+    const btn = document.createElement("button");
+    btn.textContent = c;
+    btn.className = "px-4 py-2 rounded-full bg-green-100 dark:bg-gray-700 text-green-700 dark:text-green-300 font-semibold whitespace-nowrap";
+    btn.onclick = () => {
+      if(c === "All") currentItems = allItems;
+      else if(c === "Combos") currentItems = allItems.filter(i => i.combo);
+      else currentItems = allItems.filter(i => i.category === c);
+      render(currentItems);
     };
-    box.appendChild(b);
+    box.appendChild(btn);
   });
 }
 
-function search(){
-  const q=document.getElementById("search").value.toLowerCase();
-  render(filtered.filter(i=>
-    i.name_en.toLowerCase().includes(q) || i.name_hi.toLowerCase().includes(q)
-  ));
-}
-
-function spiceIcons(n){
-  return "🌶".repeat(n);
-}
-
 function render(items){
-  const m=document.getElementById("menu");
-  m.innerHTML="";
-  items.forEach(i=>{
-    const name = lang==="en" ? (i.name_en || "Item") : (i.name_hi || "Item");
-    const price = i.price || 0;
-    const img = i.image || "";
-    const msg = encodeURIComponent(`Order: ${name} - ₹${price}`);
-
-    m.innerHTML+=`
-      <div class="bg-white rounded-xl shadow p-2">
-        ${img ? `<img src="${img}" class="rounded-lg h-32 w-full object-cover">` : ""}
-        <div class="font-semibold mt-1">${name}</div>
-        <div class="text-sm">${"🌶".repeat(i.spice||0)} ${i.calories?`🔥 ${i.calories} cal`:``}</div>
-        <div class="flex justify-between items-center mt-1">
-          <div class="text-green-600 font-bold">₹${price}</div>
-          <a href="https://wa.me/91XXXXXXXXXX?text=${msg}" target="_blank"
-             class="bg-green-500 text-white px-2 py-1 rounded text-sm">Order</a>
+  const m = document.getElementById("menu");
+  m.innerHTML = "";
+  items.forEach(i => {
+    const name = lang === "en" ? i.name_en : i.name_hi;
+    const msg = encodeURIComponent(`Order: ${name} - ₹${i.price}`);
+    m.innerHTML += `
+      <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow hover:shadow-lg transition p-2">
+        ${i.popular ? `<div class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">Popular</div>` : ``}
+        ${i.image ? `<img src="${i.image}" class="rounded-xl h-32 w-full object-cover">` : ""}
+        <div class="mt-2 font-semibold text-gray-800 dark:text-gray-100">${name}</div>
+        <div class="text-sm text-gray-500 dark:text-gray-400">${"🌶".repeat(i.spice || 0)} ${i.calories ? `🔥 ${i.calories} cal` : ""}</div>
+        <div class="flex justify-between items-center mt-2">
+          <div class="text-lg font-bold text-green-600 dark:text-green-400">₹${i.price}</div>
+          <a href="https://wa.me/${WHATSAPP}?text=${msg}" target="_blank"
+             class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-sm">Order</a>
         </div>
       </div>
     `;
   });
 }
 
+document.getElementById("search").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  render(currentItems.filter(i =>
+    i.name_en.toLowerCase().includes(q) || i.name_hi.toLowerCase().includes(q)
+  ));
+});
 
-document.getElementById("langBtn").onclick=()=>{
-  lang = lang==="en"?"hi":"en";
-  document.getElementById("langBtn").innerText = lang==="en"?"हिंदी":"English";
-  render(filtered);
+document.getElementById("langBtn").onclick = () => {
+  lang = lang === "en" ? "hi" : "en";
+  document.getElementById("langBtn").textContent = lang === "en" ? "हिंदी" : "English";
+  render(currentItems);
 };
 </script>
 
 </body>
 </html>
-
