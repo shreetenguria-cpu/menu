@@ -58,21 +58,26 @@ function render(items){
   const m=document.getElementById("menu");
   m.innerHTML="";
   items.forEach(i=>{
-    const msg = encodeURIComponent(`Order: ${i.name_en} - ₹${i.price}`);
+    const name = lang==="en" ? (i.name_en || "Item") : (i.name_hi || "Item");
+    const price = i.price || 0;
+    const img = i.image || "";
+    const msg = encodeURIComponent(`Order: ${name} - ₹${price}`);
+
     m.innerHTML+=`
       <div class="bg-white rounded-xl shadow p-2">
-        ${i.image?`<img src="${i.image}" class="rounded-lg h-32 w-full object-cover">`:``}
-        <div class="font-semibold mt-1">${lang==="en"?i.name_en:i.name_hi}</div>
-        <div class="text-sm">${spiceIcons(i.spice)} ${i.calories?`🔥 ${i.calories} cal`:``}</div>
+        ${img ? `<img src="${img}" class="rounded-lg h-32 w-full object-cover">` : ""}
+        <div class="font-semibold mt-1">${name}</div>
+        <div class="text-sm">${"🌶".repeat(i.spice||0)} ${i.calories?`🔥 ${i.calories} cal`:``}</div>
         <div class="flex justify-between items-center mt-1">
-          <div class="text-green-600 font-bold">₹${i.price}</div>
-          <a href="https://wa.me/${WHATSAPP}?text=${msg}" target="_blank"
-            class="bg-green-500 text-white px-2 py-1 rounded text-sm">Order</a>
+          <div class="text-green-600 font-bold">₹${price}</div>
+          <a href="https://wa.me/91XXXXXXXXXX?text=${msg}" target="_blank"
+             class="bg-green-500 text-white px-2 py-1 rounded text-sm">Order</a>
         </div>
       </div>
     `;
   });
 }
+
 
 document.getElementById("langBtn").onclick=()=>{
   lang = lang==="en"?"hi":"en";
@@ -83,3 +88,4 @@ document.getElementById("langBtn").onclick=()=>{
 
 </body>
 </html>
+
