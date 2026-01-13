@@ -15,6 +15,25 @@
   --card:#ffffff;
   --muted:#777;
 }
+  
+.item img {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.item img.loaded {
+  opacity: 1;
+}
+.item img {
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
 
 body {
   margin:0;
@@ -204,19 +223,26 @@ function render(list){
       const s=document.createElement("div");
       s.className="section";
       s.textContent=current;
-      menu.appendChild(s);
-      if(current.toLowerCase().includes("thali")){
-        const d=document.createElement("div");
-        d.className="desc";
-        d.style.padding="0 18px 6px";
-        d.textContent="Complete meal with dal, sabzi, roti, rice, salad and dessert.";
-        menu.appendChild(d);
-      }
-    }
+      menu.appendChild(s);}
+      const d = document.createElement("div");
+    d.className = "item";
+    d.innerHTML = `
+      <img data-src="${i.image}" class="lazy" loading="lazy">
+      <div>
+        <div class="name">${i.name}</div>
+        <div class="desc">${i.desc || ""}</div>
+        <div class="price">₹${i.price}</div>
+      </div>`;
+    menu.appendChild(d);
+  });
+
+  initLazyLoading();
+}
+    
     const d=document.createElement("div");
     d.className="item";
     d.innerHTML=`
-      <img src="${i.image}">
+      <img data-src="${i.image}" loading="lazy" class="lazy">
       <div>
         <div class="name">${i.name}</div>
         <div class="desc">${i.desc||""}</div>
@@ -236,7 +262,31 @@ function doSearch(){
   const q=document.getElementById("search").value.toLowerCase();
   render(allItems.filter(i=>i.name.toLowerCase().includes(q)));
 }
+
+  function initLazyLoading() {
+  const imgs = document.querySelectorAll("img.lazy");
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const img = e.target;
+        img.src = img.dataset.src;
+        img.onload = () => img.classList.add("loaded");
+        observer.unobserve(img);
+      }
+    });
+  }, { rootMargin: "200px" });
+
+  imgs.forEach(img => observer.observe(img));
+}
+
+  img.onload = () => {
+  img.classList.add("loaded");
+  img.style.animation = "none";
+};
+
 </script>
 
 </body>
 </html>
+
