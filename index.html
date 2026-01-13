@@ -227,7 +227,7 @@ function render(list){
       const d = document.createElement("div");
     d.className = "item";
     d.innerHTML = `
-      <img data-src="${i.image}" class="lazy" loading="lazy">
+     <img data-src="https://images.weserv.nl/?url=${encodeURIComponent(i.image)}&w=200&h=200&fit=cover" class="lazy" loading="lazy">
       <div>
         <div class="name">${i.name}</div>
         <div class="desc">${i.desc || ""}</div>
@@ -289,4 +289,5 @@ function doSearch(){
 
 </body>
 </html>
+
 
