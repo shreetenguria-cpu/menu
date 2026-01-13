@@ -15,65 +15,6 @@
   --card:#ffffff;
   --muted:#777;
 }
- #splash {
-  position:fixed;
-  inset:0;
-  background:linear-gradient(135deg,#fff7ed,#ffe4e1);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:999;
-}
-
-.splash-card {
-  text-align:center;
-  animation:pop 0.5s ease;
-}
-
-.splash-card img {
-  width:90px;
-  margin-bottom:12px;
-}
-
-.splash-text {
-  font-size:20px;
-  font-weight:700;
-  background:linear-gradient(135deg,#ff6b5a,#facc15);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.loader {
-  margin:16px auto 0;
-  width:40px;
-  height:40px;
-  border:4px solid #facc15;
-  border-top:4px solid #ff6b5a;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-}
-
-@keyframes spin { to { transform:rotate(360deg); } }
-@keyframes pop { from { transform:scale(0.9); opacity:0 } to { transform:scale(1); opacity:1 } }
- 
-.item img {
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.item img.loaded {
-  opacity: 1;
-}
-.item img {
-  background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
-  background-size: 400% 100%;
-  animation: shimmer 1.4s infinite;
-}
-
-@keyframes shimmer {
-  0% { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
-}
 
 body {
   margin:0;
@@ -86,13 +27,35 @@ body {
   display:flex;
   justify-content:center;
 }
-<div id="splash">
-  <div class="splash-card">
-    <img src="logo.png">
-    <div class="splash-text">Shreeji Cafe & Restaurant</div>
-    <div class="loader"></div>
-  </div>
-</div>
+
+#splash {
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,#fff7ed,#ffe4e1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+
+.splash-card { text-align:center; animation:pop 0.5s ease; }
+.splash-card img { width:90px; margin-bottom:12px; }
+.splash-text {
+  font-size:20px; font-weight:700;
+  background:linear-gradient(135deg,#ff6b5a,#facc15);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.loader {
+  margin:16px auto 0;
+  width:40px; height:40px;
+  border:4px solid #facc15;
+  border-top:4px solid #ff6b5a;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+@keyframes pop { from { transform:scale(0.9); opacity:0 } to { transform:scale(1); opacity:1 } }
 
 .app {
   background: rgba(243,244,246,0.95);
@@ -104,128 +67,85 @@ body {
   overflow:hidden;
 }
 
-
 .header {
   background: linear-gradient(135deg,#fff,#fff7ed);
   padding:14px 18px 10px;
   text-align:center;
   border-bottom:1px solid #eee;
 }
-
-.header img {
-  height:46px;
-  object-fit:contain;
-  margin-bottom:6px;
-}
-
+.header img { height:46px; margin-bottom:6px; }
 .title {
-  font-size:22px;
-  font-weight:700;
+  font-size:22px; font-weight:700;
   background:linear-gradient(135deg,#ff6b5a,#facc15);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
+.subtitle { font-size:13px; color:#a16207; }
 
-.subtitle {
-  font-size:13px;
-  color:#a16207;
-  margin-top:4px;
+.about {
+  padding:18px; font-size:13px; color:#78350f;
+  background:#fff7ed; margin:12px 18px; border-radius:16px;
 }
 
-.search {
-  padding:10px 18px;
-  background:var(--card);
-}
-
+.search { padding:10px 18px; background:var(--card); }
 .search input {
-  width:100%;
-  padding:10px 14px;
-  border-radius:12px;
-  border:1px solid #ddd;
-  font-size:14px;
+  width:100%; padding:10px 14px;
+  border-radius:12px; border:1px solid #ddd; font-size:14px;
 }
 
 .pills {
-  display:flex;
-  gap:10px;
-  padding:12px 18px;
-  overflow-x:auto;
-  background:var(--card);
+  display:flex; gap:10px; padding:12px 18px;
+  overflow-x:auto; background:var(--card);
 }
-
 .pill {
-  padding:6px 14px;
-  background:#fef3c7;
-  border-radius:999px;
-  font-size:13px;
-  color:#92400e;
-  cursor:pointer;
+  padding:6px 14px; background:#fef3c7;
+  border-radius:999px; font-size:13px; color:#92400e; cursor:pointer;
 }
-
-.pill.active {
-  background:var(--accent);
-  color:white;
-}
+.pill.active { background:var(--accent); color:white; }
 
 .section {
-  padding:14px 0 6px 18px;
-  font-size:18px;
-  font-weight:700;
-  color:#7c2d12;
+  padding:14px 0 6px 18px; font-size:18px; font-weight:700; color:#7c2d12;
 }
 
 .item {
-  display:flex;
-  gap:12px;
-  padding:12px 18px;
-  background:var(--card);
-  margin:8px 18px;
-  border-radius:16px;
-  box-shadow:0 6px 16px rgba(0,0,0,.06);
+  display:flex; gap:12px; padding:12px 18px;
+  background:var(--card); margin:8px 18px;
+  border-radius:16px; box-shadow:0 6px 16px rgba(0,0,0,.06);
 }
 
 .item img {
-  width:64px;
-  height:64px;
-  border-radius:12px;
-  object-fit:cover;
+  width:64px; height:64px; border-radius:12px; object-fit:cover;
+  opacity:0; transition:opacity 0.4s ease;
+  background:linear-gradient(90deg,#eee 25%,#f5f5f5 37%,#eee 63%);
+  background-size:400% 100%; animation:shimmer 1.4s infinite;
+}
+.item img.loaded { opacity:1; animation:none; }
+
+@keyframes shimmer {
+  0% { background-position:100% 0; }
+  100% { background-position:-100% 0; }
 }
 
-.name {
-  font-size:15px;
-  font-weight:600;
-  color:#1f2937;
-}
-
-.desc {
-  font-size:12px;
-  color:#6b7280;
-  margin-top:2px;
-}
-
-.price {
-  font-size:14px;
-  font-weight:700;
-  color:var(--accent);
-  margin-top:4px;
-}
-
-.about {
-  padding:18px;
-  font-size:13px;
-  color:#78350f;
-  background:#fff7ed;
-  margin:12px 18px;
-  border-radius:16px;
-}
+.name { font-size:15px; font-weight:600; color:#1f2937; }
+.desc { font-size:12px; color:#6b7280; }
+.price { font-size:14px; font-weight:700; color:var(--accent); margin-top:4px; }
 </style>
 </head>
+
 <body>
+
+<div id="splash">
+  <div class="splash-card">
+    <img src="logo.png" onerror="this.src='https://via.placeholder.com/90x40?text=Logo'">
+    <div class="splash-text">Shreeji Cafe & Restaurant</div>
+    <div class="loader"></div>
+  </div>
+</div>
 
 <div class="app">
 
   <div class="header">
-    <img src="https://cdn.jsdelivr.net/gh/twbs/icons@1.11.1/icons/egg-fried.svg" onerror="this.src='https://via.placeholder.com/80x40?text=Logo'">
+    <img src="logo.png" onerror="this.src='https://via.placeholder.com/80x40?text=Logo'">
     <div class="title">Shreeji Cafe & Restaurant</div>
     <div class="subtitle">Every Bite Takes You Home</div>
   </div>
@@ -240,20 +160,18 @@ body {
 
   <div class="pills" id="pills"></div>
   <div id="menu"></div>
+
 </div>
 
 <script>
 const API = "https://script.google.com/macros/s/AKfycbzxBSxMEch_tdDUbTEEtzngBQWHRI83Ce8HELgA-GDjCG63drp0tSaDAAODACeFpwk4/exec";
 let allItems = [];
 
-fetch(API)
-  .then(r=>r.json())
-  .then(d=>{
-    allItems = d.items;
-    init(allItems);
-    document.getElementById("splash").style.display="none";
-  });
-
+fetch(API).then(r=>r.json()).then(d=>{
+  allItems = d.items;
+  init(allItems);
+  document.getElementById("splash").style.display="none";
+});
 
 function init(items){
   const cats=[...new Set(items.map(i=>i.category))];
@@ -279,26 +197,12 @@ function render(list){
       const s=document.createElement("div");
       s.className="section";
       s.textContent=current;
-      menu.appendChild(s);}
-      const d = document.createElement("div");
-    d.className = "item";
-    d.innerHTML = `
-     <img data-src="https://images.weserv.nl/?url=${encodeURIComponent(i.image)}&w=200&h=200&fit=cover" class="lazy" loading="lazy">
-      <div>
-        <div class="name">${i.name}</div>
-        <div class="desc">${i.desc || ""}</div>
-        <div class="price">₹${i.price}</div>
-      </div>`;
-    menu.appendChild(d);
-  });
-
-  initLazyLoading();
-}
-    
+      menu.appendChild(s);
+    }
     const d=document.createElement("div");
     d.className="item";
     d.innerHTML=`
-      <img data-src="${i.image}" loading="lazy" class="lazy">
+      <img data-src="https://images.weserv.nl/?url=${encodeURIComponent(i.image)}&w=200&h=200&fit=cover" class="lazy">
       <div>
         <div class="name">${i.name}</div>
         <div class="desc">${i.desc||""}</div>
@@ -306,6 +210,7 @@ function render(list){
       </div>`;
     menu.appendChild(d);
   });
+  initLazyLoading();
 }
 
 function filter(cat,p){
@@ -319,32 +224,21 @@ function doSearch(){
   render(allItems.filter(i=>i.name.toLowerCase().includes(q)));
 }
 
-  function initLazyLoading() {
-  const imgs = document.querySelectorAll("img.lazy");
-
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const img = e.target;
-        img.src = img.dataset.src;
-        img.onload = () => img.classList.add("loaded");
+function initLazyLoading(){
+  const imgs=document.querySelectorAll("img.lazy");
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const img=e.target;
+        img.src=img.dataset.src;
+        img.onload=()=>img.classList.add("loaded");
         observer.unobserve(img);
       }
     });
-  }, { rootMargin: "200px" });
-
-  imgs.forEach(img => observer.observe(img));
+  },{rootMargin:"200px"});
+  imgs.forEach(img=>observer.observe(img));
 }
-
-  img.onload = () => {
-  img.classList.add("loaded");
-  img.style.animation = "none";
-};
-
 </script>
 
 </body>
 </html>
-
-
-
