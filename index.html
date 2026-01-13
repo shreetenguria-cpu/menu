@@ -2,217 +2,111 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Menu</title>
+<title>Shreeji Menu</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff6b5a">
+
 <style>
 :root {
-  --accent: #ff6b5a;
-  --bg: #f3f4f6;
-  --card: #ffffff;
-  --muted: #888;
+  --accent:#ff6b5a; --bg:#f3f4f6; --card:#fff; --muted:#888;
 }
-
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Inter, system-ui;
-  background: #e5e7eb;
-  display: flex;
-  justify-content: center;
-}
-
-.app {
-  background: var(--bg);
-  width: 100%;
-  max-width: 420px;
-  min-height: 100vh;
-  border-radius: 30px 30px 0 0;
-  box-shadow: 0 0 40px rgba(0,0,0,.15);
-  overflow: hidden;
-}
-
-.header {
-  background: var(--card);
-  padding: 18px 18px 10px;
-  border-bottom: 1px solid #eee;
-}
-
-.title {
-  font-size: 22px;
-  font-weight: 700;
-}
-
-.tagline {
-  font-size: 14px;
-  color: var(--muted);
-}
-
-.pills {
-  display: flex;
-  gap: 10px;
-  padding: 12px 18px;
-  overflow-x: auto;
-  background: var(--card);
-}
-
-.pill {
-  padding: 6px 14px;
-  background: #f1f1f1;
-  border-radius: 999px;
-  font-size: 13px;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.pill.active {
-  background: var(--accent);
-  color: white;
-}
-
-.section {
-  padding: 14px 0 6px 18px;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.item {
-  display: flex;
-  gap: 12px;
-  padding: 12px 18px;
-  background: var(--card);
-  margin: 8px 18px;
-  border-radius: 16px;
-  box-shadow: 0 6px 16px rgba(0,0,0,.05);
-}
-
-.item img {
-  width: 64px;
-  height: 64px;
-  border-radius: 12px;
-  object-fit: cover;
-}
-
-.item-body {
-  flex: 1;
-}
-
-.name {
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.desc {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 2px;
-  line-height: 1.4;
-}
-
-.price {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--accent);
-  margin-top: 4px;
-}
-
-.badge {
-  font-size: 10px;
-  padding: 3px 6px;
-  border-radius: 6px;
-  background: #ffe4e1;
-  color: #d94841;
-  margin-left: 6px;
-}
-
-.about {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.35);
-  display: none;
-  align-items: flex-end;
-}
-
-.about-card {
-  background: var(--card);
-  width: 100%;
-  border-radius: 24px 24px 0 0;
-  padding: 20px;
-}
-
+body { margin:0; font-family:system-ui; background:#e5e7eb; display:flex; justify-content:center; }
+.app { background:var(--bg); width:100%; max-width:420px; min-height:100vh; border-radius:30px 30px 0 0; box-shadow:0 0 40px rgba(0,0,0,.15); overflow:hidden; }
+.header { background:var(--card); padding:14px 18px 10px; text-align:center; border-bottom:1px solid #eee; }
+.header img { height:48px; object-fit:contain; margin-bottom:4px; }
+.title { font-size:20px; font-weight:700; }
+.search { padding:10px 18px; background:var(--card); }
+.search input { width:100%; padding:10px 14px; border-radius:12px; border:1px solid #ddd; font-size:14px; }
+.pills { display:flex; gap:10px; padding:12px 18px; overflow-x:auto; background:var(--card); }
+.pill { padding:6px 14px; background:#f1f1f1; border-radius:999px; font-size:13px; cursor:pointer; }
+.pill.active { background:var(--accent); color:white; }
+.section { padding:14px 0 6px 18px; font-size:18px; font-weight:600; }
+.item { display:flex; gap:12px; padding:12px 18px; background:var(--card); margin:8px 18px; border-radius:16px; box-shadow:0 6px 16px rgba(0,0,0,.05); }
+.item img { width:64px; height:64px; border-radius:12px; object-fit:cover; }
+.item-body { flex:1; }
+.name { font-size:15px; font-weight:600; }
+.desc { font-size:12px; color:var(--muted); margin-top:2px; }
+.price { font-size:14px; font-weight:700; color:var(--accent); margin-top:4px; }
 </style>
 </head>
 <body>
 
 <div class="app">
-
   <div class="header">
-    <div class="title">Every Bite <span style="color:var(--accent)">Takes You Home</span></div>
+    <img src="logo.png">
+    <div class="title">ShreeJi Cafe & Restaurant</div>
+  </div>
+
+  <div class="search">
+    <input type="text" id="search" placeholder="Search dishes..." oninput="doSearch()">
   </div>
 
   <div class="pills" id="pills"></div>
   <div id="menu"></div>
-
-</div>
-
-<div class="about" id="about" onclick="closeAbout()">
-  <div class="about-card" onclick="event.stopPropagation()">
-    <h3>Hot Chili Kitchen</h3>
-    <p>10AM – 11PM</p>
-    <p>9876543210</p>
-    <p>New Delhi, India</p>
-  </div>
 </div>
 
 <script>
-fetch("https://script.google.com/macros/s/AKfycbzxBSxMEch_tdDUbTEEtzngBQWHRI83Ce8HELgA-GDjCG63drp0tSaDAAODACeFpwk4/exec")
-  .then(r => r.json())
-  .then(data => init(data.items));
+const API = "https://script.google.com/macros/s/AKfycbzxBSxMEch_tdDUbTEEtzngBQWHRI83Ce8HELgA-GDjCG63drp0tSaDAAODACeFpwk4/exec";
+let allItems = [];
 
-function init(items) {
-  const cats = [...new Set(items.map(i => i.category))];
-  const pills = document.getElementById("pills");
-  const menu = document.getElementById("menu");
+fetch(API).then(r=>r.json()).then(d=>{
+  allItems = d.items;
+  init(allItems);
+});
 
-  cats.forEach((c, i) => {
-    const p = document.createElement("div");
-    p.className = "pill" + (i === 0 ? " active" : "");
-    p.textContent = c;
-    p.onclick = () => filter(c, p);
+function init(items){
+  const cats=[...new Set(items.map(i=>i.category))];
+  const pills=document.getElementById("pills");
+  pills.innerHTML="";
+  cats.forEach((c,i)=>{
+    const p=document.createElement("div");
+    p.className="pill"+(i==0?" active":"");
+    p.textContent=c;
+    p.onclick=()=>filter(c,p);
     pills.appendChild(p);
   });
-
   render(items);
+}
 
-  function render(list) {
-    menu.innerHTML = "";
-    let current = "";
+function render(list){
+  const menu=document.getElementById("menu");
+  menu.innerHTML="";
+  let current="";
+  list.forEach(i=>{
+    if(i.category!==current){
+      current=i.category;
+      const s=document.createElement("div");
+      s.className="section";
+      s.textContent=current;
+      menu.appendChild(s);
+    }
+    const d=document.createElement("div");
+    d.className="item";
+    d.innerHTML=`
+      <img src="${i.image}">
+      <div class="item-body">
+        <div class="name">${i.name}</div>
+        <div class="desc">${i.desc||""}</div>
+        <div class="price">₹${i.price}</div>
+      </div>`;
+    menu.appendChild(d);
+  });
+}
 
-    list.forEach(i => {
-      if (i.category !== current) {
-        current = i.category;
-        const s = document.createElement("div");
-        s.className = "section";
-        s.textContent = current;
-        menu.appendChild(s);
-      }
+function filter(cat,p){
+  document.querySelectorAll(".pill").forEach(x=>x.classList.remove("active"));
+  p.classList.add("active");
+  render(allItems.filter(i=>i.category===cat));
+}
 
-      const d = document.createElement("div");
-      d.className = "item";
-      d.innerHTML = `
-        <img src="${i.image}">
-        <div class="item-body">
-          <div class="name">${i.name}${i.best ? '<span class="badge">BEST SELLER</span>' : ''}</div>
-          <div class="desc">${i.desc || ''}</div>
-          <div class="price">₹${i.price}</div>
-        </div>
-      `;
-      menu.appendChild(d);
-    });
-  }
+function doSearch(){
+  const q=document.getElementById("search").value.toLowerCase();
+  render(allItems.filter(i=>i.name.toLowerCase().includes(q)));
+}
 
-  function filter(cat, pill) {
-    document.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
-    pill.classList.add("active");
-    render(items.filter(i => i.category === cat));
-  }
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js");
 }
 </script>
 
