@@ -80,6 +80,10 @@ body {
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
+  <div id="qrBadge" style="display:none;color:green;font-size:12px">
+  QR Special 50% Menu
+</div>
+
 .subtitle { font-size:13px; color:#a16207; }
 
 .about {
@@ -169,6 +173,7 @@ let allItems = [];
 
 fetch(API).then(r=>r.json()).then(d=>{
   allItems = d.items;
+  const isQR = new URLSearchParams(window.location.search).get("qr") === "1";
   init(allItems);
   document.getElementById("splash").style.display="none";
 });
@@ -199,15 +204,27 @@ function render(list){
       s.textContent=current;
       menu.appendChild(s);
     }
-    const d=document.createElement("div");
-    d.className="item";
-    d.innerHTML=`
-      <img data-src="https://images.weserv.nl/?url=${encodeURIComponent(i.image)}&w=200&h=200&fit=cover" class="lazy">
-      <div>
-        <div class="name">${i.name}</div>
-        <div class="desc">${i.desc||""}</div>
-        <div class="price">₹${i.price}</div>
-      </div>`;
+    const waText = encodeURIComponent(
+  `Hi Shreeji Cafe, I want to order:\n• ${i.name}\nPrice: ₹${isQR ? (i.price/2).toFixed(0) : i.price}`
+);
+
+d.innerHTML = `
+  <img data-src="https://images.weserv.nl/?url=${encodeURIComponent(i.image)}&w=200&h=200&fit=cover" class="lazy">
+  <div style="flex:1">
+    <div class="name">${i.name}</div>
+    <div class="desc">${i.desc||""}</div>
+    <div class="price">₹${isQR ? (i.price/2).toFixed(0) : i.price}</div>
+
+    <a href="https://wa.me/91XXXXXXXXXX?text=${waText}"
+       style="display:inline-block;margin-top:6px;
+              padding:6px 10px;
+              background:#25D366;color:white;
+              border-radius:10px;
+              text-decoration:none;font-size:12px;">
+       Order on WhatsApp
+    </a>
+  </div>
+`;
     menu.appendChild(d);
   });
   initLazyLoading();
@@ -239,6 +256,17 @@ function initLazyLoading(){
   imgs.forEach(img=>observer.observe(img));
 }
 </script>
+<a href="https://wa.me/918512034223"
+   style="position:fixed;bottom:20px;right:16px;
+          background:#25D366;color:white;
+          width:56px;height:56px;
+          border-radius:50%;
+          display:flex;align-items:center;justify-content:center;
+          font-size:28px;box-shadow:0 6px 16px rgba(0,0,0,.25);
+          text-decoration:none;z-index:1000;">
+   💬
+</a>
 
 </body>
 </html>
+
