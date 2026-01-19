@@ -1,68 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Kitchen KOT Dashboard</title>
+<title>Kitchen Dashboard</title>
 <style>
-body{font-family:system-ui;background:#111;color:white;}
-#board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px;}
+body{margin:0;font-family:system-ui;background:#111;color:white;}
+#board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:12px;}
 .card{background:#222;padding:12px;border-radius:12px;}
 .done{background:#16a34a;color:white;border:none;padding:6px 10px;border-radius:8px;}
- 
 </style>
 </head>
 <body>
-<h2 style="text-align:center">LIVE KITCHEN KOT</h2>
+
+<h2 style="text-align:center">Kitchen KOT</h2>
 <div id="board"></div>
 
 <script>
-const BACKEND =
-"https://script.google.com/macros/s/AKfycbwdnLe_6HRzuSmB72wMCkwPv3wiATPxxyQet_6RU2VFWus5iFm9MfO24O-9p0D_d3qX/exec";
+const BACKEND="https://script.google.com/macros/s/AKfycbwdnLe_6HRzuSmB72wMCkwPv3wiATPxxyQet_6RU2VFWus5iFm9MfO24O-9p0D_d3qX/exec";
+let timers={};
 
-let timers = {};
-
-function loadKOT(){
- fetch(BACKEND + "?kot=1")
-  .then(r => r.json())
-  .then(d => {
-    const b = document.getElementById("board");
-    b.innerHTML = "";
-
-    d.forEach(k => {
-      if(!timers[k.kot]) timers[k.kot] = Date.now();
-
-      const elapsedMs = Date.now() - timers[k.kot];
-      const mins = Math.floor(elapsedMs / 60000);
-      const secs = Math.floor((elapsedMs % 60000) / 1000);
-
-      // Color logic
-      let timerColor = "white";
-      if(mins >= 12) timerColor = "orange";
-
-      b.innerHTML += `
-        <div class="card">
-          <h3>${k.kot}</h3>
-          <h4>Table ${k.table}</h4>
-          <pre>${k.text}</pre>
-          <small>${k.time} | ${k.status}</small><br>
-          <b style="color:${timerColor}">
-            ⏱ Time: ${mins}m ${secs}s
-          </b><br><br>
-          <button class="done" onclick="complete('${k.kot}')">
-            Mark Completed
-          </button>
-        </div>`;
-    });
+function load(){
+ fetch(BACKEND+"?kot=1").then(r=>r.json()).then(d=>{
+  board.innerHTML="";
+  d.forEach(k=>{
+   if(!timers[k.kot]) timers[k.kot]=Date.now();
+   const m=Math.floor((Date.now()-timers[k.kot])/60000);
+   const s=Math.floor(((Date.now()-timers[k.kot])%60000)/1000);
+   board.innerHTML+=`
+   <div class="card">
+    <h3>${k.kot}</h3>
+    <b>Table ${k.table}</b>
+    <pre>${k.text}</pre>
+    <b style="color:${m>=12?'orange':'white'}">⏱ ${m}m ${s}s</b><br><br>
+    <button class="done" onclick="complete('${k.kot}')">Completed</button>
+   </div>`;
   });
+ });
 }
 
-function complete(kot){
-  fetch(BACKEND+"?complete="+kot);
-  alert(kot+" marked completed (table freed)");
-  delete timers[kot]; // stop timer
+function complete(k){
+ fetch(BACKEND+"?complete="+k);
+ delete timers[k];
 }
 
-setInterval(loadKOT, 5000);
-loadKOT();
+setInterval(load,5000);load();
 </script>
 </body>
 </html>
