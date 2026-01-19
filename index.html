@@ -251,36 +251,7 @@ async function checkout(){
   cart={}; updateCartBtn(); closeCart(); loadTables();
 }
 
- const text = `🧾 NEW KOT\n\n${lines.join("\n")}\n\nTotal: ₹${total}`;
-
- // Save to Google Sheet + auto KOT
- fetch(BACKEND,{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({
-     table:1,
-     order:cart,
-     total:total,
-     via:isQR?"QR":"Normal",
-     text:text
-   })
- });
-
- // Send to Telegram Kitchen
- fetch(`https://api.telegram.org/bot${TELEGRAM_BOT}/sendMessage`,{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({chat_id:TELEGRAM_CHAT_ID,text:text})
- });
-
- document.getElementById("voice").play();
- alert("Order sent to Kitchen");
- cart={};
- updateCartBtn();
- closeCart();
- loadTables();
-}
-
+ 
 function printBill(){
  let subtotal=0;
 
@@ -323,4 +294,5 @@ Thank you! Visit again.
 </script>
 </body>
 </html>
+
 
