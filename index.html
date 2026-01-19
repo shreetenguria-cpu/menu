@@ -40,6 +40,25 @@ body{
  padding:10px;
 }
 
+ .table {
+  transition: background 0.8s ease, transform 0.3s ease;
+}
+
+.table.occupied {
+  background: #fee2e2;
+}
+
+.table.free {
+  background: #dcfce7;
+  animation: pulseGreen 0.8s ease;
+}
+
+@keyframes pulseGreen {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
 .table{
  padding:6px;
  border-radius:10px;
@@ -314,22 +333,25 @@ fetch(API).then(r=>r.json()).then(d=>{
 
 /* -------- TABLE STATUS -------- */
 function loadTables(){
- fetch(BACKEND+"?tables=1")
- .then(r=>r.json())
- .then(d=>{
-   const box = document.getElementById("tableStatus");
-   box.innerHTML="";
-   d.forEach(t=>{
-     const color = t.status==="Free" ? "#dcfce7" : "#fee2e2";
-     box.innerHTML += `
-  <div class="table"
-       style="background:${color};cursor:pointer"
-       onclick="selectTable(${t.table})">
-    T${t.table}
-  </div>`;
+  fetch(BACKEND + "?tables=1")
+   .then(r => r.json())
+   .then(d => {
+     const box = document.getElementById("tableStatus");
+     box.innerHTML = "";
+
+     d.forEach(t => {
+       const cls = t.status === "Free" ? "free" : "occupied";
+
+       box.innerHTML += `
+        <div class="table ${cls}"
+             onclick="selectTable(${t.table})"
+             style="cursor:pointer">
+          T${t.table}
+        </div>`;
+     });
    });
- });
 }
+
 
 /* -------- MENU INIT -------- */
 function init(items){
@@ -458,21 +480,27 @@ function closeCart(){
 }
 
 /* -------- CHECKOUT -------- */
-async function checkout(){
- const table = document.getElementById("tableNo").value;
- const waiter = document.getElementById("waiter").value;
+const res = await fetch(BACKEND, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    table,
+    waiter,
+    order: cart,
+    subtotal,
+    tax,
+    service,
+    total,
+    via: isQR ? "QR" : "Normal",
+    text
+  })
+})
+.then(r => r.json())
+.catch(err => {
+  alert("Backend error — check Apps Script permissions");
+  console.error(err);
+});
 
- if(!table){ alert("Select table"); return; }
- if(!waiter){ alert("Enter waiter name"); return; }
- if(Object.keys(cart).length===0){ alert("Cart empty"); return; }
-
- let lines=[], subtotal=0;
-
- for(let item in cart){
-   const row = cart[item].qty * cart[item].price;
-   subtotal += row;
-   lines.push(`• ${item} × ${cart[item].qty} = ₹${row}`);
- }
 
  const tax = Math.round(subtotal*0.05);
  const service = Math.round(subtotal*0.03);
@@ -572,3 +600,4 @@ function initLazy(){
 </script>
 </body>
 </html>
+
