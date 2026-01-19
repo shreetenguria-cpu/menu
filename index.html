@@ -12,6 +12,34 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
 
 .header{text-align:center;padding:12px;background:#fff7ed;}
 
+
+ .checkout {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+/* Click animation */
+.checkout:active {
+  transform: scale(0.97);
+}
+
+/* Loading state animation */
+.checkout.loading {
+  background: #999 !important;
+  pointer-events: none;
+}
+
+.checkout.loading::after {
+  content: "🍳 Sending...";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.2);
+}
+
 /* TABLE STATUS */
 .table-grid{
  display:grid;
@@ -124,11 +152,15 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
 
 <div class="app">
 <div class="header">
-  <h3>Shreeji Cafe & Restaurant</h3>
+  <img src="logo.png" style="height:60px;display:block;margin:0 auto 6px">
+  <h3 style="margin:0">Shreeji Cafe & Restaurant</h3>
 </div>
 
+
 <!-- TABLE STATUS (tap = preselect) -->
-<div class="table-grid" id="tableStatus"></div>
+<!-- TABLE STATUS (hidden from header, still used in cart) -->
+<div class="table-grid" id="tableStatus" style="display:none"></div>
+
 
 <div class="pills" id="pills"></div>
 <div id="menu"></div>
@@ -137,6 +169,18 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
 <a href="kitchen.html" target="_blank" id="kitchenBtn">👨‍🍳</a>
 
 <div id="cartBtn" onclick="openCart()">🛒<div id="badge">0</div></div>
+<div id="loader" style="
+ display:none;
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,0.6);
+ align-items:center;
+ justify-content:center;
+ z-index:999;
+">
+  <img src="https://i.pinimg.com/originals/3f/2a/12/3f2a12ba15f5d2566553254b4a75f37c.gif"
+       style="width:120px;border-radius:16px">
+</div>
 
 <div id="cartModal" onclick="if(event.target===this)closeCart()">
  <div id="cartBox">
@@ -304,6 +348,9 @@ function closeCart(){
 
 /* ---------- CHECKOUT (FIXED) ---------- */
 async function checkout(){
+ document.getElementById("loader").style.display = "flex";
+ const btn = document.querySelector(".checkout");
+btn.classList.add("loading");
  const table = tableNo.value;
 
  if(!table){ alert("Select table"); return; }
@@ -360,6 +407,10 @@ TOTAL: ₹${total}`;
  updateBadge();
  closeCart();
  loadTables();
+
+ btn.classList.remove("loading");
+document.getElementById("loader").style.display = "none";
+
 }
 
 /* ---------- LAZY IMAGES ---------- */
@@ -378,4 +429,5 @@ function initLazy(){
 </script>
 </body>
 </html>
+
 
