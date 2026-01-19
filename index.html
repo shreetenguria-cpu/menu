@@ -3,270 +3,238 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Shreeji Menu</title>
-
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ff6b5a">
 
 <style>
-:root {
-  --accent:#ff6b5a;
-  --accent2:#facc15;
-  --bg:#f3f4f6;
-  --card:#ffffff;
-  --muted:#777;
-}
-
-body {
-  margin:0;
-  font-family:"Poppins", system-ui;
-  background:
-    linear-gradient(rgba(255,255,255,0.88), rgba(255,255,255,0.88)),
-    url("https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=1200&q=60");
-  background-size: cover;
-  background-position: center;
-  display:flex;
-  justify-content:center;
-}
-
-#splash {
-  position:fixed;
-  inset:0;
-  background:linear-gradient(135deg,#fff7ed,#ffe4e1);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:999;
-}
-
-.splash-card { text-align:center; animation:pop 0.5s ease; }
-.splash-card img { width:90px; margin-bottom:12px; }
-.splash-text {
-  font-size:20px; font-weight:700;
-  background:linear-gradient(135deg,#ff6b5a,#facc15);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.loader {
-  margin:16px auto 0;
-  width:40px; height:40px;
-  border:4px solid #facc15;
-  border-top:4px solid #ff6b5a;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-}
-@keyframes spin { to { transform:rotate(360deg); } }
-@keyframes pop { from { transform:scale(0.9); opacity:0 } to { transform:scale(1); opacity:1 } }
-
-.app {
-  background: rgba(243,244,246,0.95);
-  width:100%;
-  max-width:420px;
-  min-height:100vh;
-  border-radius:30px 30px 0 0;
-  box-shadow:0 0 40px rgba(0,0,0,.25);
-  overflow:hidden;
-}
-
-.header {
-  background: linear-gradient(135deg,#fff,#fff7ed);
-  padding:14px 18px 10px;
-  text-align:center;
-  border-bottom:1px solid #eee;
-}
-.header img { height:46px; margin-bottom:6px; }
-.title {
-  font-size:22px; font-weight:700;
-  background:linear-gradient(135deg,#ff6b5a,#facc15);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-  <div id="qrBadge" style="display:none;color:green;font-size:12px">
-  QR Special 50% Menu
-</div>
-
-.subtitle { font-size:13px; color:#a16207; }
-
-.about {
-  padding:18px; font-size:13px; color:#78350f;
-  background:#fff7ed; margin:12px 18px; border-radius:16px;
-}
-
-.search { padding:10px 18px; background:var(--card); }
-.search input {
-  width:100%; padding:10px 14px;
-  border-radius:12px; border:1px solid #ddd; font-size:14px;
-}
-
-.pills {
-  display:flex; gap:10px; padding:12px 18px;
-  overflow-x:auto; background:var(--card);
-}
-.pill {
-  padding:6px 14px; background:#fef3c7;
-  border-radius:999px; font-size:13px; color:#92400e; cursor:pointer;
-}
-.pill.active { background:var(--accent); color:white; }
-
-.section {
-  padding:14px 0 6px 18px; font-size:18px; font-weight:700; color:#7c2d12;
-}
-
-.item {
-  display:flex; gap:12px; padding:12px 18px;
-  background:var(--card); margin:8px 18px;
-  border-radius:16px; box-shadow:0 6px 16px rgba(0,0,0,.06);
-}
-
-.item img {
-  width:64px; height:64px; border-radius:12px; object-fit:cover;
-  opacity:0; transition:opacity 0.4s ease;
-  background:linear-gradient(90deg,#eee 25%,#f5f5f5 37%,#eee 63%);
-  background-size:400% 100%; animation:shimmer 1.4s infinite;
-}
-.item img.loaded { opacity:1; animation:none; }
-
-@keyframes shimmer {
-  0% { background-position:100% 0; }
-  100% { background-position:-100% 0; }
-}
-
-.name { font-size:15px; font-weight:600; color:#1f2937; }
-.desc { font-size:12px; color:#6b7280; }
-.price { font-size:14px; font-weight:700; color:var(--accent); margin-top:4px; }
+:root{--accent:#ff6b5a;}
+body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-content:center;}
+.app{width:100%;max-width:440px;min-height:100vh;background:#fff;box-shadow:0 0 20px rgba(0,0,0,.15);}
+.header{text-align:center;padding:12px;background:#fff7ed;}
+.table-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px;}
+.table{padding:6px;border-radius:10px;text-align:center;font-size:12px;}
+.search{padding:10px;}
+.search input{width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;}
+.pills{display:flex;gap:8px;overflow-x:auto;padding:10px;}
+.pill{padding:6px 12px;background:#fef3c7;border-radius:999px;font-size:12px;}
+.pill.active{background:var(--accent);color:white;}
+.section{padding:10px 14px;font-weight:700;}
+.item{display:flex;gap:10px;padding:10px 14px;margin:6px 10px;border-radius:16px;background:#fff;box-shadow:0 6px 14px rgba(0,0,0,.06);}
+.price{color:var(--accent);font-weight:700;}
+.btn{padding:6px 10px;border-radius:10px;border:none;font-size:12px;}
+.add{background:var(--accent);color:white;}
+.remove{background:#e5e7eb;}
+#cartBtn{position:fixed;bottom:20px;right:16px;background:var(--accent);color:white;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;}
+#cartModal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;}
+#cartBox{width:90%;max-width:360px;background:white;border-radius:20px;padding:16px;}
+.cartItem{display:flex;justify-content:space-between;font-size:13px;margin:6px 0;}
+.checkout{width:100%;padding:10px;background:#25D366;color:white;border:none;border-radius:12px;margin-top:8px;}
+#printBill{width:100%;padding:8px;border-radius:10px;margin-top:6px;}
 </style>
 </head>
 
 <body>
-
-<div id="splash">
-  <div class="splash-card">
-    <img src="logo.png" onerror="this.src='https://via.placeholder.com/90x40?text=Logo'">
-    <div class="splash-text">Shreeji Cafe & Restaurant</div>
-    <div class="loader"></div>
-  </div>
-</div>
-
 <div class="app">
 
-  <div class="header">
-    <img src="logo.png" onerror="this.src='https://via.placeholder.com/80x40?text=Logo'">
-    <div class="title">Shreeji Cafe & Restaurant</div>
-    <div class="subtitle">Every Bite Takes You Home</div>
-  </div>
-
-  <div class="about">
-    🍽 <b>About Us:</b> A warm family restaurant serving fresh vegetarian Indian meals, hygienically prepared and served with love.
-  </div>
-
-  <div class="search">
-    <input type="text" id="search" placeholder="Search dishes..." oninput="doSearch()">
-  </div>
-
-  <div class="pills" id="pills"></div>
-  <div id="menu"></div>
-
+<div class="header">
+  <img src="logo.png" style="height:40px">
+  <h3>Shreeji Cafe & Restaurant</h3>
 </div>
 
+<div class="table-grid" id="tableStatus"></div>
+
+<div class="search">
+  <input id="search" placeholder="Search dishes..." oninput="doSearch()">
+</div>
+
+<div class="pills" id="pills"></div>
+<div id="menu"></div>
+</div>
+
+<div id="cartBtn" onclick="openCart()">🛒</div>
+
+<div id="cartModal" onclick="if(event.target===this) closeCart()">
+  <div id="cartBox">
+    <h3>Your Order</h3>
+    <div id="cartList"></div>
+    <div id="cartTotal" style="font-weight:700"></div>
+    <button class="checkout" onclick="checkout()">Send to Kitchen</button>
+    <button id="printBill" onclick="printBill()">🖨 Print Bill</button>
+  </div>
+</div>
+
+<audio id="voice" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7e13d8b4e8.mp3"></audio>
+
 <script>
+const BACKEND = "https://script.google.com/macros/s/AKfycbwdnLe_6HRzuSmB72wMCkwPv3wiATPxxyQet_6RU2VFWus5iFm9MfO24O-9p0D_d3qX/exec";
+
 const API = "https://script.google.com/macros/s/AKfycbzxBSxMEch_tdDUbTEEtzngBQWHRI83Ce8HELgA-GDjCG63drp0tSaDAAODACeFpwk4/exec";
+
+const TELEGRAM_BOT = "8568547875:AAHK7SDOSKUMdnICtcPEvHRIz7WlnEXNFio";
+const TELEGRAM_CHAT_ID = "-5139522761";
+
+const isQR = new URLSearchParams(location.search).get("qr")==="1";
 let allItems = [];
+let cart = {};
 
 fetch(API).then(r=>r.json()).then(d=>{
-  allItems = d.items;
-  const isQR = new URLSearchParams(window.location.search).get("qr") === "1";
-  init(allItems);
-  document.getElementById("splash").style.display="none";
+ allItems = d.items;
+ init(allItems);
+ loadTables();
 });
 
+function loadTables(){
+ fetch(BACKEND+"?tables=1")
+ .then(r=>r.json())
+ .then(d=>{
+   const box = document.getElementById("tableStatus");
+   box.innerHTML="";
+   d.forEach(t=>{
+     const color = t.status==="Free" ? "#dcfce7" : "#fee2e2";
+     box.innerHTML += `
+      <div class="table" style="background:${color}">
+        T${t.table}
+      </div>`;
+   });
+ });
+}
+
 function init(items){
-  const cats=[...new Set(items.map(i=>i.category))];
-  const pills=document.getElementById("pills");
-  pills.innerHTML="";
-  cats.forEach((c,i)=>{
-    const p=document.createElement("div");
-    p.className="pill"+(i==0?" active":"");
-    p.textContent=c;
-    p.onclick=()=>filter(c,p);
-    pills.appendChild(p);
-  });
-  render(items);
+ const cats=[...new Set(items.map(i=>i.category))];
+ const pills=document.getElementById("pills");
+ pills.innerHTML="";
+ cats.forEach((c,i)=>{
+   const p=document.createElement("div");
+   p.className="pill"+(i==0?" active":"");
+   p.textContent=c;
+   p.onclick=()=>filter(c,p);
+   pills.appendChild(p);
+ });
+ render(items);
 }
 
 function render(list){
-  const menu=document.getElementById("menu");
-  menu.innerHTML="";
-  let current="";
-  list.forEach(i=>{
-    if(i.category!==current){
-      current=i.category;
-      const s=document.createElement("div");
-      s.className="section";
-      s.textContent=current;
-      menu.appendChild(s);
-    }
-    const waText = encodeURIComponent(
-  `Hi Shreeji Cafe, I want to order:\n• ${i.name}\nPrice: ₹${isQR ? (i.price/2).toFixed(0) : i.price}`
-);
+ const menu=document.getElementById("menu");
+ menu.innerHTML="";
+ let current="";
 
-d.innerHTML = `
-  <img data-src="https://images.weserv.nl/?url=${encodeURIComponent(i.image)}&w=200&h=200&fit=cover" class="lazy">
-  <div style="flex:1">
-    <div class="name">${i.name}</div>
-    <div class="desc">${i.desc||""}</div>
-    <div class="price">₹${isQR ? (i.price/2).toFixed(0) : i.price}</div>
+ list.forEach(i=>{
+  if(i.category!==current){
+    current=i.category;
+    const s=document.createElement("div");
+    s.className="section";
+    s.textContent=current;
+    menu.appendChild(s);
+  }
 
-    <a href="https://wa.me/91XXXXXXXXXX?text=${waText}"
-       style="display:inline-block;margin-top:6px;
-              padding:6px 10px;
-              background:#25D366;color:white;
-              border-radius:10px;
-              text-decoration:none;font-size:12px;">
-       Order on WhatsApp
-    </a>
-  </div>
-`;
-    menu.appendChild(d);
-  });
-  initLazyLoading();
+  const price = isQR ? Math.round(i.price/2) : i.price;
+
+  const d=document.createElement("div");
+  d.className="item";
+  d.innerHTML=`
+   <img src="${i.image}" width="64">
+   <div style="flex:1">
+     <div><b>${i.name}</b></div>
+     <div class="price">₹${price}</div>
+     <button class="btn add" onclick="addToCart('${i.name}',${price})">Add</button>
+     <button class="btn remove" onclick="removeFromCart('${i.name}')">Remove</button>
+   </div>
+  `;
+  menu.appendChild(d);
+ });
 }
 
-function filter(cat,p){
-  document.querySelectorAll(".pill").forEach(x=>x.classList.remove("active"));
-  p.classList.add("active");
-  render(allItems.filter(i=>i.category===cat));
+function addToCart(name,price){
+ cart[name] = cart[name] ? {...cart[name], qty:cart[name].qty+1} : {qty:1,price};
+ updateCartBtn();
 }
 
-function doSearch(){
-  const q=document.getElementById("search").value.toLowerCase();
-  render(allItems.filter(i=>i.name.toLowerCase().includes(q)));
+function removeFromCart(name){
+ if(cart[name]){
+   cart[name].qty--;
+   if(cart[name].qty<=0) delete cart[name];
+ }
+ updateCartBtn();
 }
 
-function initLazyLoading(){
-  const imgs=document.querySelectorAll("img.lazy");
-  const observer=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        const img=e.target;
-        img.src=img.dataset.src;
-        img.onload=()=>img.classList.add("loaded");
-        observer.unobserve(img);
-      }
-    });
-  },{rootMargin:"200px"});
-  imgs.forEach(img=>observer.observe(img));
+function updateCartBtn(){
+ let count=Object.values(cart).reduce((a,b)=>a+b.qty,0);
+ document.getElementById("cartBtn").innerText = count>0 ? "🛒 "+count : "🛒";
+}
+
+function openCart(){
+ const box=document.getElementById("cartList");
+ box.innerHTML="";
+ let total=0;
+
+ for(let item in cart){
+   const rowTotal = cart[item].qty * cart[item].price;
+   total += rowTotal;
+   box.innerHTML += `<div class="cartItem">
+      <span>${item} × ${cart[item].qty}</span>
+      <span>₹${rowTotal}</span>
+   </div>`;
+ }
+ document.getElementById("cartTotal").innerText = "Total: ₹"+total;
+ document.getElementById("cartModal").style.display="flex";
+}
+
+function closeCart(){ document.getElementById("cartModal").style.display="none"; }
+
+function checkout(){
+ if(Object.keys(cart).length===0){ alert("Cart empty"); return; }
+
+ let lines=[], total=0;
+ for(let item in cart){
+   total += cart[item].qty*cart[item].price;
+   lines.push(`• ${item} × ${cart[item].qty} = ₹${cart[item].qty*cart[item].price}`);
+ }
+
+ const text = `🧾 NEW KOT\n\n${lines.join("\n")}\n\nTotal: ₹${total}`;
+
+ // Save to Google Sheet + auto KOT
+ fetch(BACKEND,{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({
+     table:1,
+     order:cart,
+     total:total,
+     via:isQR?"QR":"Normal",
+     text:text
+   })
+ });
+
+ // Send to Telegram Kitchen
+ fetch(`https://api.telegram.org/bot${TELEGRAM_BOT}/sendMessage`,{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({chat_id:TELEGRAM_CHAT_ID,text:text})
+ });
+
+ document.getElementById("voice").play();
+ alert("Order sent to Kitchen");
+ cart={};
+ updateCartBtn();
+ closeCart();
+ loadTables();
+}
+
+function printBill(){
+ let bill = "SHREEJI CAFE & RESTAURANT\n-------------------------\n";
+ let total=0;
+
+ for(let item in cart){
+   const row = cart[item].qty * cart[item].price;
+   total += row;
+   bill += `${item.padEnd(18)} ${cart[item].qty} x ₹${cart[item].price}\n`;
+ }
+
+ bill += "\n-------------------------\nTOTAL: ₹"+total+"\n";
+ const w = window.open();
+ w.document.write(`<pre style="font-size:14px">${bill}</pre>`);
+ w.print();
 }
 </script>
-<a href="https://wa.me/918512034223"
-   style="position:fixed;bottom:20px;right:16px;
-          background:#25D366;color:white;
-          width:56px;height:56px;
-          border-radius:50%;
-          display:flex;align-items:center;justify-content:center;
-          font-size:28px;box-shadow:0 6px 16px rgba(0,0,0,.25);
-          text-decoration:none;z-index:1000;">
-   💬
-</a>
-
 </body>
 </html>
-
