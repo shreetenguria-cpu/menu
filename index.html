@@ -40,6 +40,22 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
   <img src="logo.png" style="height:40px">
   <h3>Shreeji Cafe & Restaurant</h3>
 </div>
+<!-- ADD THIS AFTER HEADER -->
+<div style="padding:10px;background:#fff7ed;margin:10px;border-radius:12px;">
+  <label>Table:</label>
+  <select id="tableNo" style="width:100%;padding:8px;border-radius:10px;">
+    <option value="">Select table</option>
+    <script>
+      for(let i=1;i<=20;i++){
+        document.write(`<option value="${i}">${i}</option>`);
+      }
+    </script>
+  </select>
+
+  <label style="display:block;margin-top:8px;">Waiter Name:</label>
+  <input id="waiter" placeholder="Enter waiter"
+         style="width:100%;padding:8px;border-radius:10px;">
+</div>
 
 <div class="table-grid" id="tableStatus"></div>
 
@@ -181,14 +197,59 @@ function openCart(){
 
 function closeCart(){ document.getElementById("cartModal").style.display="none"; }
 
-function checkout(){
- if(Object.keys(cart).length===0){ alert("Cart empty"); return; }
+async function checkout(){
+  const table = document.getElementById("tableNo").value;
+  const waiter = document.getElementById("waiter").value || "N/A";
 
- let lines=[], total=0;
- for(let item in cart){
-   total += cart[item].qty*cart[item].price;
-   lines.push(`• ${item} × ${cart[item].qty} = ₹${cart[item].qty*cart[item].price}`);
- }
+  if(!table){ alert("Select table first"); return; }
+  if(Object.keys(cart).length===0){ alert("Cart empty"); return; }
+
+  let lines=[], subtotal=0;
+
+  for(let item in cart){
+    const row = cart[item].qty * cart[item].price;
+    subtotal += row;
+    lines.push(`• ${item} × ${cart[item].qty} = ₹${row}`);
+  }
+
+  const tax = Math.round(subtotal * 0.05);      // 5% tax
+  const service = Math.round(subtotal * 0.03);  // 3% service
+  const total = subtotal + tax + service;
+
+  const text = `🧾 NEW KOT\nTable: ${table}\nWaiter: ${waiter}\n\n`
+               + lines.join("\n")
+               + `\n\nSubtotal: ₹${subtotal}`
+               + `\nTax (5%): ₹${tax}`
+               + `\nService (3%): ₹${service}`
+               + `\nTOTAL: ₹${total}`;
+
+  // Send to backend (gets auto KOT + Bill number)
+  const res = await fetch(BACKEND,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      table, waiter, order:cart,
+      subtotal, tax, service, total,
+      via:isQR?"QR":"Normal",
+      text
+    })
+  }).then(r=>r.json());
+
+  // Send to Telegram Kitchen
+  fetch(`https://api.telegram.org/bot${TELEGRAM_BOT}/sendMessage`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      chat_id:TELEGRAM_CHAT_ID,
+      text:`${text}\n\nKOT: ${res.kot}\nBILL: ${res.bill}`
+    })
+  });
+
+  document.getElementById("voice").play();
+  alert(`Order sent!\n${res.kot} | ${res.bill}`);
+
+  cart={}; updateCartBtn(); closeCart(); loadTables();
+}
 
  const text = `🧾 NEW KOT\n\n${lines.join("\n")}\n\nTotal: ₹${total}`;
 
@@ -221,16 +282,40 @@ function checkout(){
 }
 
 function printBill(){
- let bill = "SHREEJI CAFE & RESTAURANT\n-------------------------\n";
- let total=0;
+ let subtotal=0;
+
+ for(let item in cart){
+   subtotal += cart[item].qty * cart[item].price;
+ }
+
+ const tax = Math.round(subtotal*0.05);
+ const service = Math.round(subtotal*0.03);
+ const total = subtotal + tax + service;
+
+ let bill = `
+SHREEJI CAFE & RESTAURANT
+-------------------------
+Table: ${document.getElementById("tableNo").value}
+Waiter: ${document.getElementById("waiter").value||"N/A"}
+-------------------------
+`;
 
  for(let item in cart){
    const row = cart[item].qty * cart[item].price;
-   total += row;
    bill += `${item.padEnd(18)} ${cart[item].qty} x ₹${cart[item].price}\n`;
  }
 
- bill += "\n-------------------------\nTOTAL: ₹"+total+"\n";
+ bill += `
+-------------------------
+Subtotal: ₹${subtotal}
+Tax 5%   : ₹${tax}
+Service 3%: ₹${service}
+-------------------------
+TOTAL    : ₹${total}
+-------------------------
+Thank you! Visit again.
+`;
+
  const w = window.open();
  w.document.write(`<pre style="font-size:14px">${bill}</pre>`);
  w.print();
@@ -238,3 +323,4 @@ function printBill(){
 </script>
 </body>
 </html>
+
