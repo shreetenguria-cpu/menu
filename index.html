@@ -18,6 +18,16 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
   overflow: hidden;
   transition: transform 0.2s ease;
 }
+ 
+@keyframes cartPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+#cartBtn.pop {
+  animation: cartPop 0.35s ease;
+}
 
 /* Click animation */
 .checkout:active {
@@ -39,6 +49,11 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
   justify-content: center;
   background: rgba(0,0,0,0.2);
 }
+
+ .checkout.success {
+  background:#16a34a !important; /* nice restaurant green */
+}
+
 
 /* TABLE STATUS */
 .table-grid{
@@ -173,14 +188,22 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
  display:none;
  position:fixed;
  inset:0;
- background:rgba(0,0,0,0.6);
+ background:rgba(0,0,0,0.75);
  align-items:center;
  justify-content:center;
+ flex-direction:column;
  z-index:999;
+ text-align:center;
+ color:white;
+ font-size:18px;
+ font-weight:600;
 ">
   <img src="https://i.pinimg.com/originals/3f/2a/12/3f2a12ba15f5d2566553254b4a75f37c.gif"
-       style="width:120px;border-radius:16px">
+       style="width:120px;border-radius:16px;margin-bottom:10px">
+  <div>🍽️ Order Received!</div>
+  <div style="font-size:14px;margin-top:4px;">Sending to Kitchen…</div>
 </div>
+
 
 <div id="cartModal" onclick="if(event.target===this)closeCart()">
  <div id="cartBox">
@@ -303,6 +326,12 @@ function render(list){
 function addToCart(name,price){
  cart[name] = cart[name] || {qty:0,price};
  cart[name].qty++;
+
+ // animate cart icon
+ const cartBtn = document.getElementById("cartBtn");
+ cartBtn.classList.add("pop");
+ setTimeout(()=>cartBtn.classList.remove("pop"), 350);
+
  updateBadge();
 }
 
@@ -402,7 +431,14 @@ TOTAL: ₹${total}`;
  });
 
  voice.play();
- alert("Order sent to kitchen");
+const btn = document.querySelector(".checkout");
+btn.classList.add("success");
+btn.innerText = "✅ Order Sent";
+ setTimeout(()=>{
+  btn.classList.remove("success");
+  btn.innerText = "Send to Kitchen";
+}, 2000);
+
  cart={};
  updateBadge();
  closeCart();
@@ -429,5 +465,6 @@ function initLazy(){
 </script>
 </body>
 </html>
+
 
 
