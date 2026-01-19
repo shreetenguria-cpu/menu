@@ -3,601 +3,204 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Shreeji Menu</title>
-<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ff6b5a">
 
 <style>
 :root{--accent:#ff6b5a;}
+body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-content:center;}
+.app{width:100%;max-width:440px;min-height:100vh;background:#fff;box-shadow:0 0 20px rgba(0,0,0,.15);}
 
-body{
- margin:0;
- font-family:system-ui;
- background:#f3f4f6;
- display:flex;
- justify-content:center;
-}
+.header{text-align:center;padding:12px;background:#fff7ed;}
 
-.app{
- width:100%;
- max-width:440px;
- min-height:100vh;
- background:#fff;
- box-shadow:0 0 20px rgba(0,0,0,.15);
-}
-
-/* HEADER */
-.header{
- text-align:center;
- padding:12px;
- background:#fff7ed;
-}
-
-/* TABLE STATUS GRID */
-.table-grid{
- display:grid;
- grid-template-columns:repeat(5,1fr);
- gap:6px;
- padding:10px;
-}
-
- .table {
-  transition: background 0.8s ease, transform 0.3s ease;
-}
-
-.table.occupied {
-  background: #fee2e2;
-}
-
-.table.free {
-  background: #dcfce7;
-  animation: pulseGreen 0.8s ease;
-}
-
-@keyframes pulseGreen {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
+.table-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px;}
 .table{
- padding:6px;
- border-radius:10px;
- text-align:center;
- font-size:12px;
-}
-
-/* FORM */
-.form-box{
- padding:10px;
- background:#fff7ed;
- margin:10px;
- border-radius:12px;
-}
-
-.form-box select,
-.form-box input{
- width:100%;
- padding:8px;
- border-radius:10px;
- border:1px solid #ddd;
-}
-
-/* SEARCH */
-.search{padding:10px;}
-.search input{
- width:100%;
- padding:10px;
- border-radius:12px;
- border:1px solid #ddd;
-}
-
-/* CATEGORIES */
-.pills{
- display:flex;
- gap:8px;
- overflow-x:auto;
- padding:10px;
-}
-.pill{
- padding:6px 12px;
- background:#fef3c7;
- border-radius:999px;
- font-size:12px;
+ padding:6px;border-radius:10px;text-align:center;font-size:12px;
+ transition:background .6s,transform .3s;
  cursor:pointer;
 }
-.pill.active{
- background:var(--accent);
- color:white;
-}
+.table.free{background:#dcfce7;animation:pulse .6s;}
+.table.occupied{background:#fee2e2;}
+@keyframes pulse{50%{transform:scale(1.05)}}
 
-/* MENU ITEMS */
-.section{
- padding:10px 14px;
- font-weight:700;
-}
+.form{padding:10px;background:#fff7ed;margin:10px;border-radius:12px;}
+.form input,.form select{width:100%;padding:8px;border-radius:10px;border:1px solid #ddd;}
 
-.item{
- display:flex;
- gap:10px;
- padding:10px 14px;
- margin:6px 10px;
- border-radius:16px;
- background:#fff;
- box-shadow:0 6px 14px rgba(0,0,0,.06);
-}
+.pills{display:flex;gap:8px;overflow-x:auto;padding:10px;}
+.pill{padding:6px 12px;background:#fef3c7;border-radius:999px;font-size:12px;cursor:pointer;}
+.pill.active{background:var(--accent);color:white;}
 
-/* IMAGE + SKELETON SHIMMER */
+.section{padding:10px 14px;font-weight:700;}
+.item{display:flex;gap:10px;padding:10px 14px;margin:6px 10px;border-radius:16px;background:#fff;box-shadow:0 6px 14px rgba(0,0,0,.06);}
+
 .item img{
- width:64px;
- height:64px;
- border-radius:10px;
- object-fit:cover;
- background:linear-gradient(90deg,#eee 25%,#f5f5f5 37%,#eee 63%);
+ width:64px;height:64px;border-radius:10px;object-fit:cover;
+ background:linear-gradient(90deg,#eee,#f5f5f5,#eee);
  background-size:400% 100%;
  animation:shimmer 1.2s infinite;
 }
+@keyframes shimmer{100%{background-position:-100%}}
 
-@keyframes shimmer {
- 0% { background-position:100% 0; }
- 100% { background-position:-100% 0; }
-}
-
-.price{
- color:var(--accent);
- font-weight:700;
-}
-
-/* BUTTONS */
-.btn{
- padding:6px 10px;
- border-radius:10px;
- border:none;
- font-size:12px;
-}
+.price{color:var(--accent);font-weight:700;}
+.btn{padding:6px 10px;border-radius:10px;border:none;font-size:12px;}
 .add{background:var(--accent);color:white;}
 .remove{background:#e5e7eb;}
 
-/* FLOATING CART WITH BADGE */
 #cartBtn{
- position:fixed;
- bottom:20px;
- right:16px;
- background:var(--accent);
- color:white;
- width:60px;
- height:60px;
- border-radius:50%;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:22px;
+ position:fixed;bottom:20px;right:16px;
+ background:var(--accent);color:white;
+ width:60px;height:60px;border-radius:50%;
+ display:flex;align-items:center;justify-content:center;font-size:22px;
+}
+#badge{
+ position:absolute;top:-6px;right:-6px;
+ background:red;color:white;
+ width:22px;height:22px;border-radius:50%;
+ display:none;align-items:center;justify-content:center;font-size:12px;
 }
 
-#cartBadge{
- position:absolute;
- top:-6px;
- right:-6px;
- background:red;
- color:white;
- width:22px;
- height:22px;
- border-radius:50%;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:12px;
-}
-
-/* KITCHEN BUTTON */
 #kitchenBtn{
- position:fixed;
- bottom:90px;
- right:16px;
- background:#111827;
- color:white;
- width:60px;
- height:60px;
- border-radius:50%;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:22px;
+ position:fixed;bottom:90px;right:16px;
+ background:#111;color:white;
+ width:60px;height:60px;border-radius:50%;
+ display:flex;align-items:center;justify-content:center;font-size:22px;
 }
 
-/* CART MODAL */
-#cartModal{
- position:fixed;
- inset:0;
- background:rgba(0,0,0,.6);
- display:none;
- align-items:center;
- justify-content:center;
-}
-
-#cartBox{
- width:90%;
- max-width:360px;
- background:white;
- border-radius:20px;
- padding:16px;
-}
-
-.cartItem{
- display:flex;
- justify-content:space-between;
- font-size:13px;
- margin:6px 0;
-}
-
-.checkout{
- width:100%;
- padding:10px;
- background:#25D366;
- color:white;
- border:none;
- border-radius:12px;
- margin-top:8px;
-}
-
-#printBill{
- width:100%;
- padding:8px;
- border-radius:10px;
- margin-top:6px;
-}
+#cartModal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;}
+#cartBox{width:90%;max-width:360px;background:white;border-radius:20px;padding:16px;}
+.cartItem{display:flex;justify-content:space-between;font-size:13px;margin:6px 0;}
+.checkout{width:100%;padding:10px;background:#25D366;color:white;border:none;border-radius:12px;margin-top:8px;}
 </style>
 </head>
 
 <body>
 
 <div class="app">
-
 <div class="header">
-  <img src="logo.png" style="height:40px">
   <h3>Shreeji Cafe & Restaurant</h3>
 </div>
 
-<!-- TABLE STATUS -->
 <div class="table-grid" id="tableStatus"></div>
 
-<!-- TABLE + WAITER -->
-<div class="form-box">
-  <label>Table:</label>
-  <select id="tableNo">
-    <option value="">Select table</option>
-    <script>
-      for(let i=1;i<=20;i++){
-        document.write(`<option value="${i}">${i}</option>`);
-      }
-    </script>
-  </select>
-
-  <label style="display:block;margin-top:8px;">Waiter Name:</label>
-  <input id="waiter" placeholder="Enter waiter">
-</div>
-
-<div class="search">
-  <input id="search" placeholder="Search dishes..." oninput="doSearch()">
+<div class="form">
+  <label>Table</label>
+  <select id="tableNo"><option value="">Select</option></select>
+  <label style="margin-top:8px;display:block">Waiter</label>
+  <input id="waiter" placeholder="Name">
 </div>
 
 <div class="pills" id="pills"></div>
 <div id="menu"></div>
-
 </div>
 
-<!-- KITCHEN DASHBOARD BUTTON -->
-<a id="kitchenBtn"
-   href="kitchen.html"
-   target="_blank">👨‍🍳</a>
+<a href="kitchen.html" target="_blank" id="kitchenBtn">👨‍🍳</a>
 
-<!-- CART BUTTON WITH BADGE -->
-<div id="cartBtn" onclick="openCart()">
-  🛒
-  <div id="cartBadge" style="display:none">0</div>
+<div id="cartBtn" onclick="openCart()">🛒<div id="badge">0</div></div>
+
+<div id="cartModal" onclick="if(event.target===this)cartModal.style.display='none'">
+ <div id="cartBox">
+  <h3>Your Order</h3>
+  <div id="cartList"></div>
+  <div id="cartTotal"></div>
+  <button class="checkout" onclick="checkout()">Send to Kitchen</button>
+ </div>
 </div>
 
-<div id="cartModal" onclick="if(event.target===this) closeCart()">
-  <div id="cartBox">
-    <h3>Your Order</h3>
-    <div id="cartList"></div>
-    <div id="cartTotal" style="font-weight:700"></div>
-    <button class="checkout" onclick="checkout()">Send to Kitchen</button>
-    <button id="printBill" onclick="printBill()">🖨 Print Bill</button>
-  </div>
-</div>
-
-<audio id="voice"
- src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7e13d8b4e8.mp3">
-</audio>
+<audio id="voice" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7e13d8b4e8.mp3"></audio>
 
 <script>
-const BACKEND =
-"https://script.google.com/macros/s/AKfycbwdnLe_6HRzuSmB72wMCkwPv3wiATPxxyQet_6RU2VFWus5iFm9MfO24O-9p0D_d3qX/exec";
+const BACKEND="https://script.google.com/macros/s/AKfycbwdnLe_6HRzuSmB72wMCkwPv3wiATPxxyQet_6RU2VFWus5iFm9MfO24O-9p0D_d3qX/exec";
+const API="https://script.google.com/macros/s/AKfycbzxBSxMEch_tdDUbTEEtzngBQWHRI83Ce8HELgA-GDjCG63drp0tSaDAAODACeFpwk4/exec";
+const BOT="8568547875:AAHK7SDOSKUMdnICtcPEvHRIz7WlnEXNFio";
+const CHAT="-5139522761";
 
-const API =
-"https://script.google.com/macros/s/AKfycbzxBSxMEch_tdDUbTEEtzngBQWHRI83Ce8HELgA-GDjCG63drp0tSaDAAODACeFpwk4/exec";
+const isQR=new URLSearchParams(location.search).get("qr")==="1";
+let items=[],cart={};
 
-const TELEGRAM_BOT = "8568547875:AAHK7SDOSKUMdnICtcPEvHRIz7WlnEXNFio";
-const TELEGRAM_CHAT_ID = "-5139522761";
+for(let i=1;i<=20;i++) tableNo.innerHTML+=`<option>${i}</option>`;
 
-const isQR = new URLSearchParams(location.search).get("qr")==="1";
+fetch(API).then(r=>r.json()).then(d=>{items=d.items;init(items);});
+loadTables();
 
-let allItems = [];
-let cart = {};
-
-fetch(API).then(r=>r.json()).then(d=>{
- allItems = d.items;
- init(allItems);
- loadTables();
-});
-
-/* -------- TABLE STATUS -------- */
 function loadTables(){
-  fetch(BACKEND + "?tables=1")
-   .then(r => r.json())
-   .then(d => {
-     const box = document.getElementById("tableStatus");
-     box.innerHTML = "";
-
-     d.forEach(t => {
-       const cls = t.status === "Free" ? "free" : "occupied";
-
-       box.innerHTML += `
-        <div class="table ${cls}"
-             onclick="selectTable(${t.table})"
-             style="cursor:pointer">
-          T${t.table}
-        </div>`;
-     });
-   });
+ fetch(BACKEND+"?tables=1").then(r=>r.json()).then(d=>{
+  tableStatus.innerHTML="";
+  d.forEach(t=>{
+   tableStatus.innerHTML+=`
+   <div class="table ${t.status.toLowerCase()}"
+    onclick="tableNo.value='${t.table}'">T${t.table}</div>`;
+  });
+ });
 }
 
-
-/* -------- MENU INIT -------- */
-function init(items){
- const cats = [...new Set(items.map(i=>i.category))];
- const pills = document.getElementById("pills");
+function init(list){
+ const cats=[...new Set(list.map(i=>i.category))];
  pills.innerHTML="";
-
  cats.forEach((c,i)=>{
-   const p = document.createElement("div");
-   p.className = "pill" + (i===0 ? " active" : "");
-   p.textContent = c;
-   p.onclick = ()=>filter(c,p);
-   pills.appendChild(p);
+  const p=document.createElement("div");
+  p.className="pill"+(i==0?" active":"");
+  p.textContent=c;
+  p.onclick=()=>{document.querySelectorAll(".pill").forEach(x=>x.classList.remove("active"));p.classList.add("active");render(list.filter(i=>i.category===c));};
+  pills.appendChild(p);
  });
-
- render(items);
+ render(list);
 }
 
-/* -------- RENDER MENU -------- */
 function render(list){
- const menu = document.getElementById("menu");
  menu.innerHTML="";
- let current="";
-
+ let cur="";
  list.forEach(i=>{
-  if(i.category!==current){
-    current=i.category;
-    const s=document.createElement("div");
-    s.className="section";
-    s.textContent=current;
-    menu.appendChild(s);
-  }
-
-  const price = isQR ? Math.round(i.price/2) : i.price;
-  const original = i.price;
-
-  const cdnImg =
-   `https://images.weserv.nl/?url=${encodeURIComponent(i.image)}&w=200&h=200&fit=cover`;
-
-  const d=document.createElement("div");
-  d.className="item";
-
-  d.innerHTML=`
-   <img data-src="${cdnImg}" class="lazy">
-   <div style="flex:1">
-     <div><b>${i.name}</b></div>
-     <div class="price">
-       ₹${price}
-       ${isQR ? `<span style="text-decoration:line-through;color:#999;font-size:12px;margin-left:6px;">₹${original}</span>` : ""}
-     </div>
-     <button class="btn add" onclick="addToCart('${i.name}',${price})">Add</button>
-     <button class="btn remove" onclick="removeFromCart('${i.name}')">Remove</button>
+  if(i.category!==cur){cur=i.category;menu.innerHTML+=`<div class="section">${cur}</div>`;}
+  const price=isQR?Math.round(i.price/2):i.price;
+  const img=`https://images.weserv.nl/?url=${encodeURIComponent(i.image)}&w=200&h=200&fit=cover`;
+  menu.innerHTML+=`
+  <div class="item">
+   <img data-src="${img}" class="lazy">
+   <div>
+    <b>${i.name}</b>
+    <div class="price">₹${price}${isQR?` <s>₹${i.price}</s>`:""}</div>
+    <button class="btn add" onclick="add('${i.name}',${price})">Add</button>
    </div>
-  `;
-  menu.appendChild(d);
+  </div>`;
  });
-
- initLazy();
+ lazy();
 }
 
-/* -------- FILTER & SEARCH -------- */
-function filter(cat,p){
- document.querySelectorAll(".pill").forEach(x=>x.classList.remove("active"));
- p.classList.add("active");
- render(allItems.filter(i=>i.category===cat));
+function add(n,p){cart[n]=(cart[n]||{qty:0,price:p});cart[n].qty++;badge();}
+function badge(){
+ const c=Object.values(cart).reduce((a,b)=>a+b.qty,0);
+ badge.style.display=c?"flex":"none";badge.innerText=c;
 }
 
-function doSearch(){
- const q=document.getElementById("search").value.toLowerCase();
- render(allItems.filter(i=>i.name.toLowerCase().includes(q)));
-}
-
-/* -------- CART LOGIC -------- */
-function addToCart(name,price){
- cart[name] = cart[name] ?
-  {...cart[name], qty:cart[name].qty+1} :
-  {qty:1,price};
- updateCartBadge();
-}
-
-function removeFromCart(name){
- if(cart[name]){
-   cart[name].qty--;
-   if(cart[name].qty<=0) delete cart[name];
- }
- updateCartBadge();
-}
- 
-function selectTable(num){
-  document.getElementById("tableNo").value = num;
-}
-
-function updateCartBadge(){
- let count = Object.values(cart).reduce((a,b)=>a+b.qty,0);
- const badge = document.getElementById("cartBadge");
-
- if(count>0){
-   badge.style.display="flex";
-   badge.innerText = count;
- }else{
-   badge.style.display="none";
- }
-}
-
-/* -------- CART MODAL -------- */
 function openCart(){
- const box=document.getElementById("cartList");
- box.innerHTML="";
- let total=0;
-
- for(let item in cart){
-   const rowTotal = cart[item].qty * cart[item].price;
-   total += rowTotal;
-   box.innerHTML += `<div class="cartItem">
-      <span>${item} × ${cart[item].qty}</span>
-      <span>₹${rowTotal}</span>
-   </div>`;
- }
-
- document.getElementById("cartTotal").innerText = "Total: ₹"+total;
- document.getElementById("cartModal").style.display="flex";
+ cartList.innerHTML="";let t=0;
+ for(let k in cart){let r=cart[k].qty*cart[k].price;t+=r;cartList.innerHTML+=`<div class="cartItem"><span>${k}×${cart[k].qty}</span><span>₹${r}</span></div>`;}
+ cartTotal.innerText="Total ₹"+t;
+ cartModal.style.display="flex";
 }
 
-function closeCart(){
- document.getElementById("cartModal").style.display="none";
+async function checkout(){
+ if(!tableNo.value||!waiter.value){alert("Table & waiter required");return;}
+ if(!Object.keys(cart).length){alert("Cart empty");return;}
+
+ let text="";let sub=0;
+ for(let k in cart){let r=cart[k].qty*cart[k].price;sub+=r;text+=`• ${k} x${cart[k].qty} = ₹${r}\n`;}
+ const tax=Math.round(sub*0.05),srv=Math.round(sub*0.03),total=sub+tax+srv;
+
+ const msg=`🧾 NEW KOT\nTable:${tableNo.value}\nWaiter:${waiter.value}\n\n${text}\nSubtotal ₹${sub}\nTax ₹${tax}\nService ₹${srv}\nTOTAL ₹${total}`;
+
+ const res=await fetch(BACKEND,{method:"POST",headers:{"Content-Type":"application/json"},
+ body:JSON.stringify({table:tableNo.value,waiter:waiter.value,order:cart,subtotal:sub,tax,service:srv,total,via:isQR?"QR":"Normal",text:msg})}).then(r=>r.json());
+
+ await fetch(`https://api.telegram.org/bot${BOT}/sendMessage`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({chat_id:CHAT,text:msg+"\n"+res.kot})});
+
+ voice.play();alert("Order sent");
+ cart={};badge();cartModal.style.display="none";loadTables();
 }
 
-/* -------- CHECKOUT -------- */
-const res = await fetch(BACKEND, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    table,
-    waiter,
-    order: cart,
-    subtotal,
-    tax,
-    service,
-    total,
-    via: isQR ? "QR" : "Normal",
-    text
-  })
-})
-.then(r => r.json())
-.catch(err => {
-  alert("Backend error — check Apps Script permissions");
-  console.error(err);
-});
-
-
- const tax = Math.round(subtotal*0.05);
- const service = Math.round(subtotal*0.03);
- const total = subtotal + tax + service;
-
- const text = `🧾 NEW KOT\nTable: ${table}\nWaiter: ${waiter}\n\n`
-             + lines.join("\n")
-             + `\n\nSubtotal: ₹${subtotal}`
-             + `\nTax (5%): ₹${tax}`
-             + `\nService (3%): ₹${service}`
-             + `\nTOTAL: ₹${total}`;
-
- const res = await fetch(BACKEND,{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({
-     table, waiter, order:cart,
-     subtotal, tax, service, total,
-     via:isQR?"QR":"Normal",
-     text
-   })
- }).then(r=>r.json());
-
- await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT}/sendMessage`,{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({
-     chat_id:TELEGRAM_CHAT_ID,
-     text:`${text}\n\nKOT: ${res.kot}\nBILL: ${res.bill}`
-   })
- });
-
- document.getElementById("voice").play();
- alert(`Order sent!\n${res.kot} | ${res.bill}`);
-
- cart={};
- updateCartBadge();
- closeCart();
- loadTables();
-}
-
-/* -------- PRINT BILL -------- */
-function printBill(){
- let subtotal=0;
-
- for(let item in cart){
-   subtotal += cart[item].qty * cart[item].price;
- }
-
- const tax = Math.round(subtotal*0.05);
- const service = Math.round(subtotal*0.03);
- const total = subtotal + tax + service;
-
- let bill = `
-SHREEJI CAFE & RESTAURANT
--------------------------
-Table: ${document.getElementById("tableNo").value}
-Waiter: ${document.getElementById("waiter").value}
--------------------------
-`;
-
- for(let item in cart){
-   const row = cart[item].qty * cart[item].price;
-   bill += `${item.padEnd(18)} ${cart[item].qty} x ₹${cart[item].price}\n`;
- }
-
- bill += `
--------------------------
-Subtotal: ₹${subtotal}
-Tax 5%   : ₹${tax}
-Service 3%: ₹${service}
--------------------------
-TOTAL    : ₹${total}
--------------------------
-Thank you! Visit again.
-`;
-
- const w = window.open();
- w.document.write(`<pre style="font-size:14px">${bill}</pre>`);
- w.print();
-}
-
-/* -------- FAST LAZY LOADING -------- */
-function initLazy(){
- const imgs = document.querySelectorAll("img.lazy");
- const observer = new IntersectionObserver(entries=>{
-   entries.forEach(e=>{
-     if(e.isIntersecting){
-       e.target.src = e.target.dataset.src;
-       observer.unobserve(e.target);
-     }
-   });
- },{rootMargin:"300px"}); // loads images early for smooth scroll
-
- imgs.forEach(img=>observer.observe(img));
+function lazy(){
+ const o=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.src=x.target.dataset.src;o.unobserve(x.target);}}),{rootMargin:"300px"});
+ document.querySelectorAll("img.lazy").forEach(i=>o.observe(i));
 }
 </script>
 </body>
 </html>
-
