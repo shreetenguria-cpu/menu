@@ -160,6 +160,21 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
  border-radius:12px;
  margin-top:8px;
 }
+
+ .confetti-piece{
+ position:fixed;
+ width:8px;
+ height:8px;
+ border-radius:50%;
+ top:60%;
+ animation:fall 2s linear forwards;
+}
+
+@keyframes fall{
+ 0%{transform:translateY(0) rotate(0deg);opacity:1;}
+ 100%{transform:translateY(-350px) rotate(360deg);opacity:0;}
+}
+
 </style>
 </head>
 
@@ -188,20 +203,42 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
  display:none;
  position:fixed;
  inset:0;
- background:rgba(0,0,0,0.75);
+ background:rgba(0,0,0,0.85);
  align-items:center;
  justify-content:center;
  flex-direction:column;
  z-index:999;
  text-align:center;
  color:white;
- font-size:18px;
- font-weight:600;
 ">
+
+  <!-- Confetti container -->
+  <div id="confetti"></div>
+
+  <!-- Checkmark animation -->
+  <div id="checkmark" style="
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    border:4px solid #16a34a;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:50px;
+    color:#16a34a;
+    transform:scale(0);
+    transition:transform .4s ease;
+    margin-bottom:10px;
+  ">✔</div>
+
   <img src="https://i.pinimg.com/originals/3f/2a/12/3f2a12ba15f5d2566553254b4a75f37c.gif"
        style="width:120px;border-radius:16px;margin-bottom:10px">
-  <div>🍽️ Order Received!</div>
-  <div style="font-size:14px;margin-top:4px;">Sending to Kitchen…</div>
+
+  <div style="font-size:20px;font-weight:700">🍽️ Order Received!</div>
+  <div id="kotDisplay" style="font-size:16px;margin-top:6px;color:#ffd700">
+     KOT: —
+  </div>
+  <div style="font-size:14px;margin-top:4px">Sending to Kitchen…</div>
 </div>
 
 
@@ -223,8 +260,13 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
 </div>
 
 <audio id="voice"
- src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg">
+ src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg">
 </audio>
+
+<audio id="voiceText"
+ src="https://actions.google.com/sounds/v1/voice/alert.ogg">
+</audio>
+
 
 
 <script>
@@ -351,6 +393,18 @@ function updateBadge(){
  }
 }
 
+ function launchConfetti(){
+  for(let i=0;i<60;i++){
+    const c=document.createElement("div");
+    c.className="confetti-piece";
+    c.style.left = Math.random()*100+"vw";
+    c.style.background = ["#ff6b5a","#16a34a","#ffd700","#3b82f6"][Math.floor(Math.random()*4)];
+    c.style.animationDelay = Math.random()+"s";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),2000);
+  }
+}
+
 /* ---------- CART MODAL ---------- */
 function openCart(){
  cartList.innerHTML="";
@@ -419,6 +473,20 @@ TOTAL: ₹${total}`;
      text
    })
  }).then(r=>r.json());
+// Show KOT on loader
+document.getElementById("kotDisplay").innerText = "KOT: " + res.kot;
+
+// Play sounds
+document.getElementById("voice").play();
+document.getElementById("voiceText").play();
+
+// Show checkmark animation
+setTimeout(()=>{
+ document.getElementById("checkmark").style.transform="scale(1)";
+},300);
+
+// Fire confetti
+setTimeout(launchConfetti,500);
 
  // ---- SEND TO TELEGRAM ----
  await fetch(`https://api.telegram.org/bot${BOT}/sendMessage`,{
@@ -447,6 +515,11 @@ btn.innerText = "✅ Order Sent";
  btn.classList.remove("loading");
 document.getElementById("loader").style.display = "none";
 
+ setTimeout(()=>{
+ document.getElementById("loader").style.display="none";
+ document.getElementById("checkmark").style.transform="scale(0)";
+}, 2500);
+
 }
 
 /* ---------- LAZY IMAGES ---------- */
@@ -465,6 +538,7 @@ function initLazy(){
 </script>
 </body>
 </html>
+
 
 
 
