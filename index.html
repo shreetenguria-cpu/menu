@@ -12,7 +12,13 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
 
 .header{text-align:center;padding:12px;background:#fff7ed;}
 
-.table-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px;}
+/* TABLE STATUS */
+.table-grid{
+ display:grid;
+ grid-template-columns:repeat(5,1fr);
+ gap:6px;
+ padding:10px;
+}
 .table{
  padding:6px;border-radius:10px;text-align:center;font-size:12px;
  transition:background .6s,transform .3s;
@@ -22,15 +28,22 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
 .table.occupied{background:#fee2e2;}
 @keyframes pulse{50%{transform:scale(1.05)}}
 
-.form{padding:10px;background:#fff7ed;margin:10px;border-radius:12px;}
-.form input,.form select{width:100%;padding:8px;border-radius:10px;border:1px solid #ddd;}
-
+/* MENU */
 .pills{display:flex;gap:8px;overflow-x:auto;padding:10px;}
 .pill{padding:6px 12px;background:#fef3c7;border-radius:999px;font-size:12px;cursor:pointer;}
 .pill.active{background:var(--accent);color:white;}
 
 .section{padding:10px 14px;font-weight:700;}
-.item{display:flex;gap:10px;padding:10px 14px;margin:6px 10px;border-radius:16px;background:#fff;box-shadow:0 6px 14px rgba(0,0,0,.06);}
+
+.item{
+ display:flex;
+ gap:10px;
+ padding:10px 14px;
+ margin:6px 10px;
+ border-radius:16px;
+ background:#fff;
+ box-shadow:0 6px 14px rgba(0,0,0,.06);
+}
 
 .item img{
  width:64px;height:64px;border-radius:10px;object-fit:cover;
@@ -45,6 +58,7 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
 .add{background:var(--accent);color:white;}
 .remove{background:#e5e7eb;}
 
+/* CART BUTTON + BADGE */
 #cartBtn{
  position:fixed;bottom:20px;right:16px;
  background:var(--accent);color:white;
@@ -58,6 +72,7 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
  display:none;align-items:center;justify-content:center;font-size:12px;
 }
 
+/* KITCHEN BUTTON */
 #kitchenBtn{
  position:fixed;bottom:90px;right:16px;
  background:#111;color:white;
@@ -65,10 +80,43 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
  display:flex;align-items:center;justify-content:center;font-size:22px;
 }
 
-#cartModal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;}
-#cartBox{width:90%;max-width:360px;background:white;border-radius:20px;padding:16px;}
-.cartItem{display:flex;justify-content:space-between;font-size:13px;margin:6px 0;}
-.checkout{width:100%;padding:10px;background:#25D366;color:white;border:none;border-radius:12px;margin-top:8px;}
+/* CART MODAL */
+#cartModal{
+ position:fixed;inset:0;
+ background:rgba(0,0,0,.6);
+ display:none;
+ align-items:center;
+ justify-content:center;
+}
+#cartBox{
+ width:90%;
+ max-width:360px;
+ background:white;
+ border-radius:20px;
+ padding:16px;
+}
+.cartRow{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin:6px 0;
+}
+.smallBtn{
+ padding:4px 8px;
+ border-radius:8px;
+ border:none;
+ background:#fee2e2;
+ font-size:12px;
+}
+.checkout{
+ width:100%;
+ padding:10px;
+ background:#25D366;
+ color:white;
+ border:none;
+ border-radius:12px;
+ margin-top:8px;
+}
 </style>
 </head>
 
@@ -79,14 +127,8 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
   <h3>Shreeji Cafe & Restaurant</h3>
 </div>
 
+<!-- TABLE STATUS (tap = preselect) -->
 <div class="table-grid" id="tableStatus"></div>
-
-<div class="form">
-  <label>Table</label>
-  <select id="tableNo"><option value="">Select</option></select>
-  <label style="margin-top:8px;display:block">Waiter</label>
-  <input id="waiter" placeholder="Name">
-</div>
 
 <div class="pills" id="pills"></div>
 <div id="menu"></div>
@@ -96,110 +138,241 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
 
 <div id="cartBtn" onclick="openCart()">🛒<div id="badge">0</div></div>
 
-<div id="cartModal" onclick="if(event.target===this)cartModal.style.display='none'">
+<div id="cartModal" onclick="if(event.target===this)closeCart()">
  <div id="cartBox">
   <h3>Your Order</h3>
+
+  <!-- TABLE SELECTION MOVED HERE -->
+  <label>Table:</label>
+  <select id="tableNo" style="width:100%;padding:8px;border-radius:10px;">
+    <option value="">Select table</option>
+  </select>
+
   <div id="cartList"></div>
-  <div id="cartTotal"></div>
+  <div id="cartTotal" style="font-weight:700;margin-top:8px"></div>
+
   <button class="checkout" onclick="checkout()">Send to Kitchen</button>
  </div>
 </div>
 
-<audio id="voice" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7e13d8b4e8.mp3"></audio>
+<audio id="voice"
+ src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7e13d8b4e8.mp3">
+</audio>
 
 <script>
-const BACKEND="https://script.google.com/macros/s/AKfycbwdnLe_6HRzuSmB72wMCkwPv3wiATPxxyQet_6RU2VFWus5iFm9MfO24O-9p0D_d3qX/exec";
-const API="https://script.google.com/macros/s/AKfycbzxBSxMEch_tdDUbTEEtzngBQWHRI83Ce8HELgA-GDjCG63drp0tSaDAAODACeFpwk4/exec";
-const BOT="8568547875:AAHK7SDOSKUMdnICtcPEvHRIz7WlnEXNFio";
-const CHAT="-5139522761";
+const BACKEND =
+"https://script.google.com/macros/s/AKfycbwdnLe_6HRzuSmB72wMCkwPv3wiATPxxyQet_6RU2VFWus5iFm9MfO24O-9p0D_d3qX/exec";
 
-const isQR=new URLSearchParams(location.search).get("qr")==="1";
-let items=[],cart={};
+const API =
+"https://script.google.com/macros/s/AKfycbzxBSxMEch_tdDUbTEEtzngBQWHRI83Ce8HELgA-GDjCG63drp0tSaDAAODACeFpwk4/exec";
 
-for(let i=1;i<=20;i++) tableNo.innerHTML+=`<option>${i}</option>`;
+const BOT = "8568547875:AAHK7SDOSKUMdnICtcPEvHRIz7WlnEXNFio";
+const CHAT = "-5139522761";
 
-fetch(API).then(r=>r.json()).then(d=>{items=d.items;init(items);});
-loadTables();
+const isQR = new URLSearchParams(location.search).get("qr")==="1";
 
+let items = [];
+let cart = {};
+
+// fill table dropdown
+for(let i=1;i<=20;i++){
+ tableNo.innerHTML += `<option value="${i}">${i}</option>`;
+}
+
+// load menu + tables
+fetch(API).then(r=>r.json()).then(d=>{
+ items = d.items;
+ initMenu(items);
+ loadTables();
+});
+
+/* ---------- TABLE STATUS ---------- */
 function loadTables(){
- fetch(BACKEND+"?tables=1").then(r=>r.json()).then(d=>{
+ fetch(BACKEND+"?tables=1")
+ .then(r=>r.json())
+ .then(d=>{
   tableStatus.innerHTML="";
   d.forEach(t=>{
-   tableStatus.innerHTML+=`
-   <div class="table ${t.status.toLowerCase()}"
-    onclick="tableNo.value='${t.table}'">T${t.table}</div>`;
+    const cls = t.status==="Free" ? "free" : "occupied";
+    tableStatus.innerHTML += `
+     <div class="table ${cls}"
+          onclick="tableNo.value='${t.table}'">
+        T${t.table}
+     </div>`;
   });
  });
 }
 
-function init(list){
- const cats=[...new Set(list.map(i=>i.category))];
+/* ---------- MENU ---------- */
+function initMenu(list){
+ const cats = [...new Set(list.map(i=>i.category))];
  pills.innerHTML="";
+
  cats.forEach((c,i)=>{
   const p=document.createElement("div");
-  p.className="pill"+(i==0?" active":"");
+  p.className="pill"+(i===0?" active":"");
   p.textContent=c;
-  p.onclick=()=>{document.querySelectorAll(".pill").forEach(x=>x.classList.remove("active"));p.classList.add("active");render(list.filter(i=>i.category===c));};
+  p.onclick=()=>filter(c,p);
   pills.appendChild(p);
  });
+
  render(list);
+}
+
+function filter(cat,p){
+ document.querySelectorAll(".pill").forEach(x=>x.classList.remove("active"));
+ p.classList.add("active");
+ render(items.filter(i=>i.category===cat));
 }
 
 function render(list){
  menu.innerHTML="";
- let cur="";
+ let current="";
+
  list.forEach(i=>{
-  if(i.category!==cur){cur=i.category;menu.innerHTML+=`<div class="section">${cur}</div>`;}
-  const price=isQR?Math.round(i.price/2):i.price;
-  const img=`https://images.weserv.nl/?url=${encodeURIComponent(i.image)}&w=200&h=200&fit=cover`;
-  menu.innerHTML+=`
-  <div class="item">
-   <img data-src="${img}" class="lazy">
-   <div>
-    <b>${i.name}</b>
-    <div class="price">₹${price}${isQR?` <s>₹${i.price}</s>`:""}</div>
-    <button class="btn add" onclick="add('${i.name}',${price})">Add</button>
-   </div>
-  </div>`;
+  if(i.category!==current){
+   current=i.category;
+   menu.innerHTML += `<div class="section">${current}</div>`;
+  }
+
+  const price = isQR ? Math.round(i.price/2) : i.price;
+  const img = `https://images.weserv.nl/?url=${encodeURIComponent(i.image)}&w=200&h=200&fit=cover`;
+
+  menu.innerHTML += `
+   <div class="item">
+     <img data-src="${img}" class="lazy">
+     <div style="flex:1">
+       <b>${i.name}</b>
+       <div class="price">₹${price}
+         ${isQR?` <s style="color:#999;font-size:12px">₹${i.price}</s>`:""}
+       </div>
+       <button class="btn add" onclick="addToCart('${i.name}',${price})">Add</button>
+     </div>
+   </div>`;
  });
- lazy();
+
+ initLazy();
 }
 
-function add(n,p){cart[n]=(cart[n]||{qty:0,price:p});cart[n].qty++;badge();}
-function badge(){
- const c=Object.values(cart).reduce((a,b)=>a+b.qty,0);
- badge.style.display=c?"flex":"none";badge.innerText=c;
+/* ---------- CART LOGIC (FIXED) ---------- */
+function addToCart(name,price){
+ cart[name] = cart[name] || {qty:0,price};
+ cart[name].qty++;
+ updateBadge();
 }
 
+function removeFromCart(name){
+ delete cart[name];
+ updateBadge();
+ openCart(); // refresh cart UI
+}
+
+function updateBadge(){
+ const count = Object.values(cart).reduce((a,b)=>a+b.qty,0);
+ if(count>0){
+   badge.style.display="flex";
+   badge.innerText = count;
+ } else {
+   badge.style.display="none";
+ }
+}
+
+/* ---------- CART MODAL ---------- */
 function openCart(){
- cartList.innerHTML="";let t=0;
- for(let k in cart){let r=cart[k].qty*cart[k].price;t+=r;cartList.innerHTML+=`<div class="cartItem"><span>${k}×${cart[k].qty}</span><span>₹${r}</span></div>`;}
- cartTotal.innerText="Total ₹"+t;
+ cartList.innerHTML="";
+ let total=0;
+
+ for(let k in cart){
+  const row = cart[k].qty * cart[k].price;
+  total += row;
+
+  cartList.innerHTML += `
+   <div class="cartRow">
+     <span>${k} × ${cart[k].qty} — ₹${row}</span>
+     <button class="smallBtn" onclick="removeFromCart('${k}')">Remove</button>
+   </div>`;
+ }
+
+ cartTotal.innerText = "Total: ₹"+total;
  cartModal.style.display="flex";
 }
 
-async function checkout(){
- if(!tableNo.value||!waiter.value){alert("Table & waiter required");return;}
- if(!Object.keys(cart).length){alert("Cart empty");return;}
-
- let text="";let sub=0;
- for(let k in cart){let r=cart[k].qty*cart[k].price;sub+=r;text+=`• ${k} x${cart[k].qty} = ₹${r}\n`;}
- const tax=Math.round(sub*0.05),srv=Math.round(sub*0.03),total=sub+tax+srv;
-
- const msg=`🧾 NEW KOT\nTable:${tableNo.value}\nWaiter:${waiter.value}\n\n${text}\nSubtotal ₹${sub}\nTax ₹${tax}\nService ₹${srv}\nTOTAL ₹${total}`;
-
- const res=await fetch(BACKEND,{method:"POST",headers:{"Content-Type":"application/json"},
- body:JSON.stringify({table:tableNo.value,waiter:waiter.value,order:cart,subtotal:sub,tax,service:srv,total,via:isQR?"QR":"Normal",text:msg})}).then(r=>r.json());
-
- await fetch(`https://api.telegram.org/bot${BOT}/sendMessage`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({chat_id:CHAT,text:msg+"\n"+res.kot})});
-
- voice.play();alert("Order sent");
- cart={};badge();cartModal.style.display="none";loadTables();
+function closeCart(){
+ cartModal.style.display="none";
 }
 
-function lazy(){
- const o=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.src=x.target.dataset.src;o.unobserve(x.target);}}),{rootMargin:"300px"});
- document.querySelectorAll("img.lazy").forEach(i=>o.observe(i));
+/* ---------- CHECKOUT (FIXED) ---------- */
+async function checkout(){
+ const table = tableNo.value;
+
+ if(!table){ alert("Select table"); return; }
+ if(!Object.keys(cart).length){ alert("Cart empty"); return; }
+
+ let lines="", subtotal=0;
+ for(let k in cart){
+   const r = cart[k].qty * cart[k].price;
+   subtotal += r;
+   lines += `• ${k} × ${cart[k].qty} = ₹${r}\n`;
+ }
+
+ const tax = Math.round(subtotal*0.05);
+ const service = Math.round(subtotal*0.03);
+ const total = subtotal + tax + service;
+
+ const text =
+`🧾 NEW KOT
+Table: ${table}
+
+${lines}
+Subtotal: ₹${subtotal}
+Tax: ₹${tax}
+Service: ₹${service}
+TOTAL: ₹${total}`;
+
+ // ---- SEND TO APPS SCRIPT (BACKEND) ----
+ const res = await fetch(BACKEND,{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({
+     table,
+     waiter:"N/A",
+     order:cart,
+     subtotal,tax,service,total,
+     via:isQR?"QR":"Normal",
+     text
+   })
+ }).then(r=>r.json());
+
+ // ---- SEND TO TELEGRAM ----
+ await fetch(`https://api.telegram.org/bot${BOT}/sendMessage`,{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({
+     chat_id:CHAT,
+     text:`${text}\n\n${res.kot}`
+   })
+ });
+
+ voice.play();
+ alert("Order sent to kitchen");
+ cart={};
+ updateBadge();
+ closeCart();
+ loadTables();
+}
+
+/* ---------- LAZY IMAGES ---------- */
+function initLazy(){
+ const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+   if(e.isIntersecting){
+    e.target.src = e.target.dataset.src;
+    obs.unobserve(e.target);
+   }
+  });
+ },{rootMargin:"300px"});
+
+ document.querySelectorAll("img.lazy").forEach(img=>obs.observe(img));
 }
 </script>
 </body>
