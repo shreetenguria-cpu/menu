@@ -6,6 +6,7 @@
 body{font-family:system-ui;background:#111;color:white;}
 #board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px;}
 .card{background:#222;padding:12px;border-radius:12px;}
+.done{background:#16a34a;color:white;border:none;padding:6px 10px;border-radius:8px;}
 </style>
 </head>
 <body>
@@ -28,11 +29,18 @@ function loadKOT(){
           <h3>${k.kot}</h3>
           <h4>Table ${k.table}</h4>
           <pre>${k.text}</pre>
-          <small>${k.time}</small>
-        </div>
-      `;
+          <small>${k.time} | ${k.status}</small><br><br>
+          <button class="done" onclick="complete('${k.kot}')">
+            Mark Completed
+          </button>
+        </div>`;
     });
   });
+}
+
+function complete(kot){
+  fetch(BACKEND+"?complete="+kot);
+  alert(kot+" marked completed");
 }
 
 setInterval(loadKOT, 5000);
