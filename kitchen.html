@@ -7,15 +7,18 @@ body{font-family:system-ui;background:#111;color:white;}
 #board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px;}
 .card{background:#222;padding:12px;border-radius:12px;}
 .done{background:#16a34a;color:white;border:none;padding:6px 10px;border-radius:8px;}
+ 
 </style>
 </head>
 <body>
-
 <h2 style="text-align:center">LIVE KITCHEN KOT</h2>
 <div id="board"></div>
 
 <script>
-const BACKEND = "https://script.google.com/macros/s/AKfycbwdnLe_6HRzuSmB72wMCkwPv3wiATPxxyQet_6RU2VFWus5iFm9MfO24O-9p0D_d3qX/exec";
+const BACKEND =
+"https://script.google.com/macros/s/AKfycbwdnLe_6HRzuSmB72wMCkwPv3wiATPxxyQet_6RU2VFWus5iFm9MfO24O-9p0D_d3qX/exec";
+
+let timers = {};   // store start times per KOT
 
 function loadKOT(){
  fetch(BACKEND+"?kot=1")
@@ -23,13 +26,20 @@ function loadKOT(){
   .then(d=>{
     const b = document.getElementById("board");
     b.innerHTML="";
+
     d.forEach(k=>{
+      if(!timers[k.kot]) timers[k.kot] = Date.now();
+
+      const mins = Math.floor((Date.now()-timers[k.kot])/60000);
+      const secs = Math.floor(((Date.now()-timers[k.kot])%60000)/1000);
+
       b.innerHTML += `
         <div class="card">
           <h3>${k.kot}</h3>
           <h4>Table ${k.table}</h4>
           <pre>${k.text}</pre>
-          <small>${k.time} | ${k.status}</small><br><br>
+          <small>${k.time} | ${k.status}</small><br>
+          <b>⏱ Time: ${mins}m ${secs}s</b><br><br>
           <button class="done" onclick="complete('${k.kot}')">
             Mark Completed
           </button>
@@ -40,7 +50,8 @@ function loadKOT(){
 
 function complete(kot){
   fetch(BACKEND+"?complete="+kot);
-  alert(kot+" marked completed");
+  alert(kot+" marked completed (table freed)");
+  delete timers[kot]; // stop timer
 }
 
 setInterval(loadKOT, 5000);
