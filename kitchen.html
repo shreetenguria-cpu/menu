@@ -18,20 +18,25 @@ body{font-family:system-ui;background:#111;color:white;}
 const BACKEND =
 "https://script.google.com/macros/s/AKfycbwdnLe_6HRzuSmB72wMCkwPv3wiATPxxyQet_6RU2VFWus5iFm9MfO24O-9p0D_d3qX/exec";
 
-let timers = {};   // store start times per KOT
+let timers = {};
 
 function loadKOT(){
- fetch(BACKEND+"?kot=1")
-  .then(r=>r.json())
-  .then(d=>{
+ fetch(BACKEND + "?kot=1")
+  .then(r => r.json())
+  .then(d => {
     const b = document.getElementById("board");
-    b.innerHTML="";
+    b.innerHTML = "";
 
-    d.forEach(k=>{
+    d.forEach(k => {
       if(!timers[k.kot]) timers[k.kot] = Date.now();
 
-      const mins = Math.floor((Date.now()-timers[k.kot])/60000);
-      const secs = Math.floor(((Date.now()-timers[k.kot])%60000)/1000);
+      const elapsedMs = Date.now() - timers[k.kot];
+      const mins = Math.floor(elapsedMs / 60000);
+      const secs = Math.floor((elapsedMs % 60000) / 1000);
+
+      // Color logic
+      let timerColor = "white";
+      if(mins >= 12) timerColor = "orange";
 
       b.innerHTML += `
         <div class="card">
@@ -39,7 +44,9 @@ function loadKOT(){
           <h4>Table ${k.table}</h4>
           <pre>${k.text}</pre>
           <small>${k.time} | ${k.status}</small><br>
-          <b>⏱ Time: ${mins}m ${secs}s</b><br><br>
+          <b style="color:${timerColor}">
+            ⏱ Time: ${mins}m ${secs}s
+          </b><br><br>
           <button class="done" onclick="complete('${k.kot}')">
             Mark Completed
           </button>
