@@ -8,42 +8,184 @@
 
 <style>
 :root{--accent:#ff6b5a;}
-body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-content:center;}
-.app{width:100%;max-width:440px;min-height:100vh;background:#fff;box-shadow:0 0 20px rgba(0,0,0,.15);}
-.header{text-align:center;padding:12px;background:#fff7ed;}
-.table-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px;}
-.table{padding:6px;border-radius:10px;text-align:center;font-size:12px;}
+
+body{
+ margin:0;
+ font-family:system-ui;
+ background:#f3f4f6;
+ display:flex;
+ justify-content:center;
+}
+
+.app{
+ width:100%;
+ max-width:440px;
+ min-height:100vh;
+ background:#fff;
+ box-shadow:0 0 20px rgba(0,0,0,.15);
+}
+
+.header{
+ text-align:center;
+ padding:12px;
+ background:#fff7ed;
+}
+
+/* table + waiter block */
+.form-box{
+ padding:10px;
+ background:#fff7ed;
+ margin:10px;
+ border-radius:12px;
+}
+
+.form-box select,
+.form-box input{
+ width:100%;
+ padding:8px;
+ border-radius:10px;
+ border:1px solid #ddd;
+}
+
+/* search */
 .search{padding:10px;}
-.search input{width:100%;padding:10px;border-radius:12px;border:1px solid #ddd;}
-.pills{display:flex;gap:8px;overflow-x:auto;padding:10px;}
-.pill{padding:6px 12px;background:#fef3c7;border-radius:999px;font-size:12px;}
-.pill.active{background:var(--accent);color:white;}
-.section{padding:10px 14px;font-weight:700;}
-.item{display:flex;gap:10px;padding:10px 14px;margin:6px 10px;border-radius:16px;background:#fff;box-shadow:0 6px 14px rgba(0,0,0,.06);}
-.price{color:var(--accent);font-weight:700;}
-.btn{padding:6px 10px;border-radius:10px;border:none;font-size:12px;}
+.search input{
+ width:100%;
+ padding:10px;
+ border-radius:12px;
+ border:1px solid #ddd;
+}
+
+/* categories */
+.pills{
+ display:flex;
+ gap:8px;
+ overflow-x:auto;
+ padding:10px;
+}
+.pill{
+ padding:6px 12px;
+ background:#fef3c7;
+ border-radius:999px;
+ font-size:12px;
+ cursor:pointer;
+}
+.pill.active{
+ background:var(--accent);
+ color:white;
+}
+
+/* menu items */
+.section{
+ padding:10px 14px;
+ font-weight:700;
+}
+
+.item{
+ display:flex;
+ gap:10px;
+ padding:10px 14px;
+ margin:6px 10px;
+ border-radius:16px;
+ background:#fff;
+ box-shadow:0 6px 14px rgba(0,0,0,.06);
+}
+
+.item img{
+ width:64px;
+ height:64px;
+ border-radius:10px;
+ object-fit:cover;
+ background:#eee;
+}
+
+.price{
+ color:var(--accent);
+ font-weight:700;
+}
+
+/* buttons */
+.btn{
+ padding:6px 10px;
+ border-radius:10px;
+ border:none;
+ font-size:12px;
+}
 .add{background:var(--accent);color:white;}
 .remove{background:#e5e7eb;}
-#cartBtn{position:fixed;bottom:20px;right:16px;background:var(--accent);color:white;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;}
-#cartModal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;}
-#cartBox{width:90%;max-width:360px;background:white;border-radius:20px;padding:16px;}
-.cartItem{display:flex;justify-content:space-between;font-size:13px;margin:6px 0;}
-.checkout{width:100%;padding:10px;background:#25D366;color:white;border:none;border-radius:12px;margin-top:8px;}
-#printBill{width:100%;padding:8px;border-radius:10px;margin-top:6px;}
+
+/* cart */
+#cartBtn{
+ position:fixed;
+ bottom:20px;
+ right:16px;
+ background:var(--accent);
+ color:white;
+ width:60px;
+ height:60px;
+ border-radius:50%;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:22px;
+}
+
+#cartModal{
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.6);
+ display:none;
+ align-items:center;
+ justify-content:center;
+}
+
+#cartBox{
+ width:90%;
+ max-width:360px;
+ background:white;
+ border-radius:20px;
+ padding:16px;
+}
+
+.cartItem{
+ display:flex;
+ justify-content:space-between;
+ font-size:13px;
+ margin:6px 0;
+}
+
+.checkout{
+ width:100%;
+ padding:10px;
+ background:#25D366;
+ color:white;
+ border:none;
+ border-radius:12px;
+ margin-top:8px;
+}
+
+#printBill{
+ width:100%;
+ padding:8px;
+ border-radius:10px;
+ margin-top:6px;
+}
 </style>
 </head>
 
 <body>
+
 <div class="app">
 
 <div class="header">
   <img src="logo.png" style="height:40px">
   <h3>Shreeji Cafe & Restaurant</h3>
 </div>
-<!-- ADD THIS AFTER HEADER -->
-<div style="padding:10px;background:#fff7ed;margin:10px;border-radius:12px;">
+
+<!-- TABLE + WAITER -->
+<div class="form-box">
   <label>Table:</label>
-  <select id="tableNo" style="width:100%;padding:8px;border-radius:10px;">
+  <select id="tableNo">
     <option value="">Select table</option>
     <script>
       for(let i=1;i<=20;i++){
@@ -53,11 +195,8 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
   </select>
 
   <label style="display:block;margin-top:8px;">Waiter Name:</label>
-  <input id="waiter" placeholder="Enter waiter"
-         style="width:100%;padding:8px;border-radius:10px;">
+  <input id="waiter" placeholder="Enter waiter">
 </div>
-
-<!--<div class="table-grid" id="tableStatus"></div> -->
 
 <div class="search">
   <input id="search" placeholder="Search dishes..." oninput="doSearch()">
@@ -65,6 +204,7 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
 
 <div class="pills" id="pills"></div>
 <div id="menu"></div>
+
 </div>
 
 <div id="cartBtn" onclick="openCart()">🛒</div>
@@ -90,48 +230,37 @@ const TELEGRAM_BOT = "8568547875:AAHK7SDOSKUMdnICtcPEvHRIz7WlnEXNFio";
 const TELEGRAM_CHAT_ID = "-5139522761";
 
 const isQR = new URLSearchParams(location.search).get("qr")==="1";
+
 let allItems = [];
 let cart = {};
 
-fetch(API).then(r=>r.json()).then(d=>{
- allItems = d.items;
- init(allItems);
- loadTables();
-});
-
-function loadTables(){
- fetch(BACKEND+"?tables=1")
+fetch(API)
  .then(r=>r.json())
  .then(d=>{
-   const box = document.getElementById("tableStatus");
-   box.innerHTML="";
-   d.forEach(t=>{
-     const color = t.status==="Free" ? "#dcfce7" : "#fee2e2";
-     box.innerHTML += `
-      <div class="table" style="background:${color}">
-        T${t.table}
-      </div>`;
-   });
+   allItems = d.items;
+   init(allItems);
  });
-}
 
 function init(items){
- const cats=[...new Set(items.map(i=>i.category))];
- const pills=document.getElementById("pills");
+ const cats = [...new Set(items.map(i=>i.category))];
+ const pills = document.getElementById("pills");
  pills.innerHTML="";
+
  cats.forEach((c,i)=>{
-   const p=document.createElement("div");
-   p.className="pill"+(i==0?" active":"");
-   p.textContent=c;
-   p.onclick=()=>filter(c,p);
+   const p = document.createElement("div");
+   p.className = "pill" + (i===0 ? " active" : "");
+   p.textContent = c;
+   p.addEventListener("click", ()=>filter(c,p));
    pills.appendChild(p);
  });
+
  render(items);
 }
 
 function render(list){
- const menu=document.getElementById("menu");
+ const menu = document.getElementById("menu");
  menu.innerHTML="";
+
  let current="";
 
  list.forEach(i=>{
@@ -144,20 +273,40 @@ function render(list){
   }
 
   const price = isQR ? Math.round(i.price/2) : i.price;
+  const original = i.price;
 
   const d=document.createElement("div");
   d.className="item";
+
+  const cdnImg = `https://images.weserv.nl/?url=${encodeURIComponent(i.image)}&w=200&h=200&fit=cover`;
+
   d.innerHTML=`
-   <img src="${i.image}" width="64">
+   <img data-src="${cdnImg}" class="lazy">
    <div style="flex:1">
      <div><b>${i.name}</b></div>
-     <div class="price">₹${price}</div>
+     <div class="price">
+       ₹${price}
+       ${isQR ? `<span style="text-decoration:line-through;color:#999;font-size:12px;margin-left:6px;">₹${original}</span>` : ""}
+     </div>
      <button class="btn add" onclick="addToCart('${i.name}',${price})">Add</button>
      <button class="btn remove" onclick="removeFromCart('${i.name}')">Remove</button>
    </div>
   `;
   menu.appendChild(d);
  });
+
+ initLazy();
+}
+
+function filter(cat,p){
+ document.querySelectorAll(".pill").forEach(x=>x.classList.remove("active"));
+ p.classList.add("active");
+ render(allItems.filter(i=>i.category===cat));
+}
+
+function doSearch(){
+ const q=document.getElementById("search").value.toLowerCase();
+ render(allItems.filter(i=>i.name.toLowerCase().includes(q)));
 }
 
 function addToCart(name,price){
@@ -174,7 +323,7 @@ function removeFromCart(name){
 }
 
 function updateCartBtn(){
- let count=Object.values(cart).reduce((a,b)=>a+b.qty,0);
+ let count = Object.values(cart).reduce((a,b)=>a+b.qty,0);
  document.getElementById("cartBtn").innerText = count>0 ? "🛒 "+count : "🛒";
 }
 
@@ -191,67 +340,70 @@ function openCart(){
       <span>₹${rowTotal}</span>
    </div>`;
  }
+
  document.getElementById("cartTotal").innerText = "Total: ₹"+total;
  document.getElementById("cartModal").style.display="flex";
 }
 
-function closeCart(){ document.getElementById("cartModal").style.display="none"; }
-
-async function checkout(){
-  const table = document.getElementById("tableNo").value;
-  const waiter = document.getElementById("waiter").value || "N/A";
-
-  if(!table){ alert("Select table first"); return; }
-  if(Object.keys(cart).length===0){ alert("Cart empty"); return; }
-
-  let lines=[], subtotal=0;
-
-  for(let item in cart){
-    const row = cart[item].qty * cart[item].price;
-    subtotal += row;
-    lines.push(`• ${item} × ${cart[item].qty} = ₹${row}`);
-  }
-
-  const tax = Math.round(subtotal * 0.05);      // 5% tax
-  const service = Math.round(subtotal * 0.03);  // 3% service
-  const total = subtotal + tax + service;
-
-  const text = `🧾 NEW KOT\nTable: ${table}\nWaiter: ${waiter}\n\n`
-               + lines.join("\n")
-               + `\n\nSubtotal: ₹${subtotal}`
-               + `\nTax (5%): ₹${tax}`
-               + `\nService (3%): ₹${service}`
-               + `\nTOTAL: ₹${total}`;
-
-  // Send to backend (gets auto KOT + Bill number)
-  const res = await fetch(BACKEND,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      table, waiter, order:cart,
-      subtotal, tax, service, total,
-      via:isQR?"QR":"Normal",
-      text
-    })
-  }).then(r=>r.json());
-
-  // Send to Telegram Kitchen
-  fetch(`https://api.telegram.org/bot${TELEGRAM_BOT}/sendMessage`,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      chat_id:TELEGRAM_CHAT_ID,
-      text:`${text}\n\nKOT: ${res.kot}\nBILL: ${res.bill}`
-    })
-  });
-
-  document.getElementById("voice").play();
-  alert(`Order sent!\n${res.kot} | ${res.bill}`);
-
-  cart={}; updateCartBtn(); closeCart(); loadTables();
+function closeCart(){
+ document.getElementById("cartModal").style.display="none";
 }
 
- 
+async function checkout(){
+ const table = document.getElementById("tableNo").value;
+ const waiter = document.getElementById("waiter").value;
+
+ if(!table){ alert("Select table"); return; }
+ if(!waiter){ alert("Enter waiter name"); return; }
+ if(Object.keys(cart).length===0){ alert("Cart empty"); return; }
+
+ let lines=[], subtotal=0;
+
+ for(let item in cart){
+   const row = cart[item].qty * cart[item].price;
+   subtotal += row;
+   lines.push(`• ${item} × ${cart[item].qty} = ₹${row}`);
+ }
+
+ const tax = Math.round(subtotal*0.05);
+ const service = Math.round(subtotal*0.03);
+ const total = subtotal + tax + service;
+
+ const text = `🧾 NEW KOT\nTable: ${table}\nWaiter: ${waiter}\n\n`
+             + lines.join("\n")
+             + `\n\nSubtotal: ₹${subtotal}`
+             + `\nTax (5%): ₹${tax}`
+             + `\nService (3%): ₹${service}`
+             + `\nTOTAL: ₹${total}`;
+
+ const res = await fetch(BACKEND,{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({
+     table, waiter, order:cart,
+     subtotal, tax, service, total,
+     via:isQR?"QR":"Normal",
+     text
+   })
+ }).then(r=>r.json());
+
+ await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT}/sendMessage`,{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({
+     chat_id:TELEGRAM_CHAT_ID,
+     text:`${text}\n\nKOT: ${res.kot}\nBILL: ${res.bill}`
+   })
+ });
+
+ document.getElementById("voice").play();
+ alert(`Order sent!\n${res.kot} | ${res.bill}`);
+
+ cart={};
+ updateCartBtn();
+ closeCart();
+}
+
 function printBill(){
  let subtotal=0;
 
@@ -267,7 +419,7 @@ function printBill(){
 SHREEJI CAFE & RESTAURANT
 -------------------------
 Table: ${document.getElementById("tableNo").value}
-Waiter: ${document.getElementById("waiter").value||"N/A"}
+Waiter: ${document.getElementById("waiter").value}
 -------------------------
 `;
 
@@ -291,9 +443,21 @@ Thank you! Visit again.
  w.document.write(`<pre style="font-size:14px">${bill}</pre>`);
  w.print();
 }
+
+/* ---------- LAZY LOADING ---------- */
+function initLazy(){
+ const imgs = document.querySelectorAll("img.lazy");
+ const observer = new IntersectionObserver(entries=>{
+   entries.forEach(e=>{
+     if(e.isIntersecting){
+       e.target.src = e.target.dataset.src;
+       observer.unobserve(e.target);
+     }
+   });
+ },{rootMargin:"200px"});
+
+ imgs.forEach(img=>observer.observe(img));
+}
 </script>
 </body>
 </html>
-
-
-
