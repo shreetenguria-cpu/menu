@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Kitchen KOT Dashboard</title>
+<style>
+body{font-family:system-ui;background:#111;color:white;}
+#board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px;}
+.card{background:#222;padding:12px;border-radius:12px;}
+</style>
+</head>
+<body>
+
+<h2 style="text-align:center">LIVE KITCHEN KOT</h2>
+<div id="board"></div>
+
+<script>
+const BACKEND = "https://script.google.com/macros/s/AKfycbwdnLe_6HRzuSmB72wMCkwPv3wiATPxxyQet_6RU2VFWus5iFm9MfO24O-9p0D_d3qX/exec";
+
+function loadKOT(){
+ fetch(BACKEND+"?kot=1")
+  .then(r=>r.json())
+  .then(d=>{
+    const b = document.getElementById("board");
+    b.innerHTML="";
+    d.forEach(k=>{
+      b.innerHTML += `
+        <div class="card">
+          <h3>${k.kot}</h3>
+          <h4>Table ${k.table}</h4>
+          <pre>${k.text}</pre>
+          <small>${k.time}</small>
+        </div>
+      `;
+    });
+  });
+}
+
+setInterval(loadKOT, 5000);
+loadKOT();
+</script>
+</body>
+</html>
