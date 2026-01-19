@@ -156,8 +156,9 @@ body{margin:0;font-family:system-ui;background:#f3f4f6;display:flex;justify-cont
 </div>
 
 <audio id="voice"
- src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7e13d8b4e8.mp3">
+ src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg">
 </audio>
+
 
 <script>
 const BACKEND =
@@ -332,7 +333,7 @@ TOTAL: ₹${total}`;
  // ---- SEND TO APPS SCRIPT (BACKEND) ----
  const res = await fetch(BACKEND,{
    method:"POST",
-   headers:{"Content-Type":"application/json"},
+   headers: {"Content-Type":"text/plain"},
    body:JSON.stringify({
      table,
      waiter:"N/A",
@@ -377,3 +378,4 @@ function initLazy(){
 </script>
 </body>
 </html>
+
